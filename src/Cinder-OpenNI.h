@@ -45,11 +45,14 @@
 #include "cinder/Surface.h"
 #include "cinder/Vector.h"
 #include "cinder/Utilities.h"
-#include "OpenNI.h"
 #include "Nite.h"
+#include "OpenNI.h"
 
 namespace OpenNI
 {
+	bool					success( nite::Status status );
+	bool					success( openni::Status status );
+
 	ci::AxisAlignedBox3f	toAxisAlignedBox3f( const nite::Point3f& aMin, const nite::Point3f& aMax );
 	ci::Planef				toPlanef( const nite::Point3f& point, const nite::Point3f& normal );
 	ci::Quatf				toQuatf( const nite::Quaternion& q );
@@ -57,6 +60,8 @@ namespace OpenNI
 
 	template<typename T>
 	std::vector<T>			toVector( const nite::Array<T>& a );
+	template<typename T>
+	std::vector<T>			toVector( const openni::Array<T>& a );
 
 	ci::Channel8u			toChannel8u( const openni::VideoFrameRef& f );
 	ci::Channel16u			toChannel16u( const openni::VideoFrameRef& f );
@@ -74,10 +79,14 @@ namespace OpenNI
 		bool				isInfraredEnabled() const; 
 		bool				isUserTrackingEnabled() const;
 
-		float				getColorFrameRate() const;
-		float				getDepthFrameRate() const;
-		float				getInfraredFrameRate() const;
+		int32_t				getColorFrameRate() const;
+		int32_t				getDepthFrameRate() const;
+		int32_t				getInfraredFrameRate() const;
 		
+		openni::PixelFormat	getColorPixelFormat() const;
+		openni::PixelFormat	getDepthPixelFormat() const;
+		openni::PixelFormat	getInfraredPixelFormat() const;
+
 		const ci::Vec2i&	getColorSize() const; 
 		const ci::Vec2i&	getDepthSize() const; 
 		const ci::Vec2i&	getInfraredSize() const;
@@ -90,9 +99,13 @@ namespace OpenNI
 		DeviceOptions&		enableInfrared( bool enable = true );
 		DeviceOptions&		enableUserTracking( bool enable = true );
 
-		DeviceOptions&		setColorFrameRate( float frameRate ); 
-		DeviceOptions&		setDepthFrameRate( float frameRate ); 
-		DeviceOptions&		setInfraredFrameRate( float frameRate );
+		DeviceOptions&		setColorFrameRate( int32_t frameRate ); 
+		DeviceOptions&		setDepthFrameRate( int32_t frameRate ); 
+		DeviceOptions&		setInfraredFrameRate( int32_t frameRate );
+
+		DeviceOptions&		setColorPixelFormat( openni::PixelFormat format );
+		DeviceOptions&		setDepthPixelFormat( openni::PixelFormat format );
+		DeviceOptions&		setInfraredPixelFormat( openni::PixelFormat format );
 
 		DeviceOptions&		setColorSize( const ci::Vec2i& size );
 		DeviceOptions&		setDepthSize( const ci::Vec2i& size );
@@ -106,9 +119,13 @@ namespace OpenNI
 		bool				mEnabledInfrared;
 		bool				mEnabledUserTracking;
 
-		float				mFrameRateColor;
-		float				mFrameRateDepth;
-		float				mFrameRateInfrared;
+		int32_t				mFrameRateColor;
+		int32_t				mFrameRateDepth;
+		int32_t				mFrameRateInfrared;
+
+		openni::PixelFormat	mPixelFormatColor;
+		openni::PixelFormat	mPixelFormatDepth;
+		openni::PixelFormat	mPixelFormatInfrared;
 
 		ci::Vec2i			mSizeColor;
 		ci::Vec2i			mSizeDepth;
@@ -154,16 +171,16 @@ namespace OpenNI
 	class VideoStreamListener : public openni::VideoStream::NewFrameListener
 	{
 	public:
-		void					onNewFrame( openni::VideoStream& stream );
+		void						onNewFrame( openni::VideoStream& stream );
 	private:
 		typedef std::function<void ( openni::VideoFrameRef )> EventHandler;
 		
 		VideoStreamListener( EventHandler eventHandler );
 
-		EventHandler			mEventHandler;
-		openni::VideoFrameRef	mFrame;
+		EventHandler				mEventHandler;
+		openni::VideoFrameRef		mFrame;
 
-		friend class			Device;
+		friend class				Device;
 	};
 
 	//////////////////////////////////////////////////////////////////////////////////////////////
@@ -199,49 +216,40 @@ namespace OpenNI
 
 		bool						isConnected() const;
 
+		void						connectColorEventHandler( const VideoStreamListener::EventHandler& eventHandler );
+		void						connectDepthEventHandler( const VideoStreamListener::EventHandler& eventHandler );
+		void						connectHandEventHandler( const HandTrackerListener::EventHandler& eventHandler );
+		void						connectInfraredEventHandler( const VideoStreamListener::EventHandler& eventHandler );
+		void						connectUserEventHandler( const UserTrackerListener::EventHandler& eventHandler );
+
 		template<typename T, typename Y>
 		inline void					connectColorEventHandler( T callback, Y* callbackObject )
 		{
-			if ( mDeviceOptions.isColorEnabled() ) {
-				mListenerColor = new VideoStreamListener( std::bind( callback, callbackObject, std::placeholders::_1 ) );
-				mStreamColor.addNewFrameListener( mListenerColor );
-			}
+			connectColorEventHandler( std::bind( callback, callbackObject, std::placeholders::_1 ) );
 		}
 
 		template<typename T, typename Y>
 		inline void					connectDepthEventHandler( T callback, Y* callbackObject )
 		{
-			if ( mDeviceOptions.isDepthEnabled() ) {
-				mListenerDepth = new VideoStreamListener( std::bind( callback, callbackObject, std::placeholders::_1 ) );
-				mStreamDepth.addNewFrameListener( mListenerDepth );
-			}
+			connectDepthEventHandler( std::bind( callback, callbackObject, std::placeholders::_1 ) );
 		}
 
 		template<typename T, typename Y>
 		inline void					connectHandEventHandler( T callback, Y* callbackObject )
 		{
-			if ( mDeviceOptions.isHandTrackingEnabled() ) {
-				mListenerHand = new HandTrackerListener( std::bind( callback, callbackObject, std::placeholders::_1 ) );
-				mTrackerHand.addNewFrameListener( mListenerHand );
-			}
+			connectHandEventHandler( std::bind( callback, callbackObject, std::placeholders::_1 ) );
 		}
 
 		template<typename T, typename Y>
 		inline void					connectInfraredEventHandler( T callback, Y* callbackObject )
 		{
-			if ( mDeviceOptions.isInfraredEnabled() ) {
-				mListenerInfrared = new VideoStreamListener( std::bind( callback, callbackObject, std::placeholders::_1 ) );
-				mStreamInfrared.addNewFrameListener( mListenerInfrared );
-			}
+			connectInfraredEventHandler( std::bind( callback, callbackObject, std::placeholders::_1 ) );
 		}
 
 		template<typename T, typename Y>
 		inline void					connectUserEventHandler( T callback, Y* callbackObject )
 		{
-			if ( mDeviceOptions.isUserTrackingEnabled() ) {
-				mListenerUser = new UserTrackerListener( std::bind( callback, callbackObject, std::placeholders::_1 ) );
-				mTrackerUser.addNewFrameListener( mListenerUser );
-			}
+			connectUserEventHandler( std::bind( callback, callbackObject, std::placeholders::_1 ) );
 		}
 	private:
 		Device( const DeviceOptions& deviceOptions );
@@ -276,19 +284,21 @@ namespace OpenNI
 	public:
 		DeviceManager();
 		~DeviceManager();
+		
+		void										initialize();
+		bool										isInitialized() const;
 
 		DeviceRef									createDevice( const DeviceOptions& deviceOptions = DeviceOptions() );
 
-		void										start();
-		void										stop();
-
-		const openni::Array<openni::DeviceInfo>&	getDeviceInfoArray() const;
-
-		bool										isInitialized() const;
+		size_t										getDeviceCount() const;
+		const std::vector<openni::DeviceInfo>&		getDeviceInfoList() const;
 	private:
+		void										enumerateDevices();
 		DeviceRef									getDevice( const std::string& uri );
+		size_t										mDeviceCount;
 		DeviceList									mDevices;
 		openni::Array<openni::DeviceInfo>			mDeviceInfoArray;
+		std::vector<openni::DeviceInfo>				mDeviceInfoList;
 		
 		bool										mInitialized;
 		

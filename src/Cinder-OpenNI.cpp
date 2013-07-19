@@ -46,6 +46,32 @@ namespace OpenNI
 
 	//////////////////////////////////////////////////////////////////////////////////////////////
 
+	bool success( nite::Status status )
+	{
+		switch ( status ) {
+		case nite::Status::STATUS_BAD_USER_ID:
+			console() << "Bad user ID" << endl;
+			return false;
+		case nite::Status::STATUS_ERROR:
+			console() << "A NiTE error occurred" << endl;
+			return false;
+		case nite::Status::STATUS_OK:
+			return true;
+		case nite::Status::STATUS_OUT_OF_FLOW:
+			console() << "NiTE out of flow error" << endl;
+			return false;
+		}
+	}
+
+	bool success( openni::Status status )
+	{
+		if ( status != openni::STATUS_OK ) {
+			console() << openni::OpenNI::getExtendedError() << endl;
+			return false;
+		}
+		return true;
+	}
+
 	AxisAlignedBox3f toAxisAlignedBox3f( const nite::Point3f& aMin, const nite::Point3f& aMax )
 	{
 		return AxisAlignedBox3f( toVec3f( aMin ), toVec3f( aMax ) );
@@ -66,11 +92,19 @@ namespace OpenNI
 		return Vec3f( v.x, v.y, v.z );
 	}
 
-	template<typename T>
+	template<typename T> 
 	vector<T> toVector( const nite::Array<T>& a )
 	{
 		vector<T> v;
-		v.insert( v.end(), &a[ 0 ], &a[ a.getSize() / sizeof( T ) ]);
+		v.insert( v.end(), &a[ 0 ], &a[ a.getSize() ]);
+		return v;
+	}
+
+	template<typename T> 
+	vector<T> toVector( const openni::Array<T>& a )
+	{
+		vector<T> v;
+		v.insert( v.end(), &a[ 0 ], &a[ a.getSize() ]);
 		return v;
 	}
 
@@ -101,10 +135,18 @@ namespace OpenNI
 		enableColor( false );
 		enableDepth( true );
 		enableHandTracking( false );
-		enableInfrared( false );
+		enableInfrared( true );
 		enableUserTracking( false );
 
-		setColorSize( Vec2i( 320, 240 ) );
+		setColorFrameRate( 30 );
+		setDepthFrameRate( 30 );
+		setInfraredFrameRate( 30 );
+
+		setColorPixelFormat( openni::PixelFormat::PIXEL_FORMAT_RGB888 );
+		setDepthPixelFormat( openni::PixelFormat::PIXEL_FORMAT_DEPTH_100_UM );
+		setInfraredPixelFormat( openni::PixelFormat::PIXEL_FORMAT_GRAY16 );
+
+		setColorSize( Vec2i( 640, 480 ) );
 		setDepthSize( Vec2i( 320, 240 ) );
 		setInfraredSize( Vec2i( 320, 240 ) );
 
@@ -136,19 +178,34 @@ namespace OpenNI
 		return mEnabledUserTracking;
 	}
 
-	float DeviceOptions::getColorFrameRate() const
+	int32_t DeviceOptions::getColorFrameRate() const
 	{
 		return mFrameRateColor;
 	}
 
-	float DeviceOptions::getDepthFrameRate() const
+	int32_t DeviceOptions::getDepthFrameRate() const
 	{
 		return mFrameRateDepth;
 	}
  
-	float DeviceOptions::getInfraredFrameRate() const
+	int32_t DeviceOptions::getInfraredFrameRate() const
 	{
 		return mFrameRateInfrared;
+	}
+
+	openni::PixelFormat	DeviceOptions::getColorPixelFormat() const
+	{
+		return mPixelFormatColor;
+	}
+
+	openni::PixelFormat	DeviceOptions::getDepthPixelFormat() const
+	{
+		return mPixelFormatDepth;
+	}
+
+	openni::PixelFormat	DeviceOptions::getInfraredPixelFormat() const
+	{
+		return mPixelFormatInfrared;
 	}
 
 	const Vec2i& DeviceOptions::getColorSize() const
@@ -201,6 +258,42 @@ namespace OpenNI
 		return *this;
 	}
 
+	DeviceOptions& DeviceOptions::setColorFrameRate( int32_t frameRate )
+	{
+		mFrameRateColor = frameRate;
+		return *this;
+	}
+
+	DeviceOptions& DeviceOptions::setDepthFrameRate( int32_t frameRate )
+	{
+		mFrameRateDepth = frameRate;
+		return *this;
+	}
+
+	DeviceOptions& DeviceOptions::setInfraredFrameRate( int32_t frameRate )
+	{
+		mFrameRateInfrared = frameRate;
+		return *this;
+	}
+
+	DeviceOptions& DeviceOptions::setColorPixelFormat( openni::PixelFormat format )
+	{
+		mPixelFormatColor = format;
+		return *this;
+	}
+
+	DeviceOptions& DeviceOptions::setDepthPixelFormat( openni::PixelFormat format )
+	{
+		mPixelFormatDepth = format;
+		return *this;
+	}
+
+	DeviceOptions& DeviceOptions::setInfraredPixelFormat( openni::PixelFormat format )
+	{
+		mPixelFormatInfrared = format;
+		return *this;
+	}
+
 	DeviceOptions& DeviceOptions::setColorSize( const Vec2i& size )
 	{
 		mSizeColor = size;
@@ -243,35 +336,79 @@ namespace OpenNI
 
 	void HandTrackerListener::onNewFrame( nite::HandTracker& tracker )
 	{
-		tracker.readFrame( &mFrame );
-		mEventHandler( mFrame );
+		if ( success( tracker.readFrame( &mFrame ) ) ) {
+			mEventHandler( mFrame );
+		}
 	}
 	
 	void UserTrackerListener::onNewFrame( nite::UserTracker& tracker )
 	{
-		tracker.readFrame( &mFrame );
-		mEventHandler( mFrame );
+		if ( success( tracker.readFrame( &mFrame ) ) ) {
+			mEventHandler( mFrame );
+		}
 	}
 
 	void VideoStreamListener::onNewFrame( openni::VideoStream& stream ) 
 	{
-		stream.readFrame( &mFrame );
-		mEventHandler( mFrame );
+		if ( success( stream.readFrame( &mFrame ) ) ) {
+			mEventHandler( mFrame );
+		}
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////
 
 	Device::Device( const DeviceOptions& deviceOptions )
+		: mConnected( false ), mDeviceOptions( deviceOptions ), mDeviceState( openni::DeviceState::DEVICE_STATE_NOT_READY ), 
+		mListenerColor( 0 ), mListenerDepth( 0 ), mListenerHand( 0 ), mListenerInfrared( 0 ), mListenerUser( 0 )
 	{
-		mConnected			= false;
-		mDeviceOptions		= deviceOptions;
-		mDeviceState		= openni::DeviceState::DEVICE_STATE_NOT_READY;
+		if ( success( mDevice.open( mDeviceOptions.getUri().c_str() ) ) ) {
+			if ( mDevice.getSensorInfo( openni::SENSOR_COLOR ) == 0 ) {
+				mDeviceOptions.enableColor( false );
+			}
+			if ( mDevice.getSensorInfo( openni::SENSOR_DEPTH ) == 0 ) {
+				mDeviceOptions.enableDepth( false );
+				mDeviceOptions.enableHandTracking( false );
+				mDeviceOptions.enableUserTracking( false );
+			}
+			if ( mDevice.getSensorInfo( openni::SENSOR_IR ) == 0 ) {
+				mDeviceOptions.enableInfrared( false );
+			}
 
-		mListenerColor		= 0;
-		mListenerDepth		= 0;
-		mListenerHand		= 0;
-		mListenerInfrared	= 0;
-		mListenerUser		= 0;
+			if ( mDeviceOptions.isColorEnabled() ) {
+				if ( success( mStreamColor.create( mDevice, openni::SENSOR_COLOR ) ) ) {
+					openni::VideoMode mode;
+					mode.setFps( mDeviceOptions.getColorFrameRate() );
+					mode.setPixelFormat( mDeviceOptions.getColorPixelFormat() );
+					mode.setResolution( mDeviceOptions.getColorSize().x, mDeviceOptions.getColorSize().y );
+				}
+			}
+
+			if ( mDeviceOptions.isDepthEnabled() ) {
+				if ( success( mStreamDepth.create( mDevice, openni::SENSOR_DEPTH ) ) ) {
+					openni::VideoMode mode;
+					mode.setFps( mDeviceOptions.getDepthFrameRate() );
+					mode.setPixelFormat( mDeviceOptions.getDepthPixelFormat() );
+					mode.setResolution( mDeviceOptions.getDepthSize().x, mDeviceOptions.getDepthSize().y );
+				}
+			}
+
+			if ( mDeviceOptions.isHandTrackingEnabled() ) {
+				success( mTrackerHand.create( &mDevice ) );
+			}
+
+			if ( mDeviceOptions.isInfraredEnabled() ) {
+				if ( success( mStreamInfrared.create( mDevice, openni::SENSOR_IR ) ) ) {
+					openni::VideoMode mode;
+					mode.setFps( mDeviceOptions.getInfraredFrameRate() );
+					mode.setPixelFormat( mDeviceOptions.getInfraredPixelFormat() );
+					mode.setResolution( mDeviceOptions.getInfraredSize().x, mDeviceOptions.getInfraredSize().y );
+				}
+			}
+
+			if ( mDeviceOptions.isUserTrackingEnabled() ) {
+				success( mTrackerUser.create( &mDevice ) );
+			}
+		}
 	}
 
 	Device::~Device()
@@ -330,65 +467,15 @@ namespace OpenNI
 
 	void Device::start()
 	{
-		mDevice.open( mDeviceOptions.getUri().c_str() );
-
-		if ( mDevice.getSensorInfo( openni::SENSOR_COLOR ) == 0 ) {
-			mDeviceOptions.enableColor( false );
-		}
-		if ( mDevice.getSensorInfo( openni::SENSOR_DEPTH ) == 0 ) {
-			mDeviceOptions.enableDepth( false );
-			mDeviceOptions.enableHandTracking( false );
-			mDeviceOptions.enableUserTracking( false );
-		}
-		if ( mDevice.getSensorInfo( openni::SENSOR_IR ) == 0 ) {
-			mDeviceOptions.enableInfrared( false );
-		}
-
-		if ( mDeviceOptions.isColorEnabled() ) {
-			if ( mStreamColor.create( mDevice, openni::SENSOR_COLOR ) != openni::STATUS_OK ) {
-				openni::VideoMode mode;
-				mode.setFps( mDeviceOptions.getColorFrameRate() );
-				mode.setPixelFormat( openni::PixelFormat::PIXEL_FORMAT_RGB888 );
-				mode.setResolution( mDeviceOptions.getColorSize().x, mDeviceOptions.getColorSize().y );
-				mStreamColor.setVideoMode( mode );
-				mStreamColor.start();
-				mDeviceOptions.enableColor( false );
+		if ( mDevice.isValid() ) {
+			if ( mDeviceOptions.isColorEnabled() && mStreamColor.isValid() ) {
+				success( mStreamColor.start() );
 			}
-		}
-
-		if ( mDeviceOptions.isDepthEnabled() ) {
-			if ( mStreamDepth.create( mDevice, openni::SENSOR_DEPTH ) != openni::STATUS_OK ) {
-				openni::VideoMode mode;
-				mode.setFps( mDeviceOptions.getDepthFrameRate() );
-				mode.setPixelFormat( openni::PixelFormat::PIXEL_FORMAT_DEPTH_1_MM );
-				mode.setResolution( mDeviceOptions.getDepthSize().x, mDeviceOptions.getDepthSize().y );
-				mStreamDepth.setVideoMode( mode );
-				mStreamDepth.start();
-				mDeviceOptions.enableDepth( false );
+			if ( mDeviceOptions.isDepthEnabled() && mStreamDepth.isValid() ) {
+				success( mStreamDepth.start() );
 			}
-		}
-
-		if ( mDeviceOptions.isHandTrackingEnabled() ) {
-			if ( mTrackerHand.create( &mDevice ) != nite::STATUS_OK ) {
-				mDeviceOptions.enableHandTracking( false );
-			}
-		}
-
-		if ( mDeviceOptions.isInfraredEnabled() ) {
-			if ( mStreamInfrared.create( mDevice, openni::SENSOR_IR ) != openni::STATUS_OK ) {
-				openni::VideoMode mode;
-				mode.setFps( mDeviceOptions.getInfraredFrameRate() );
-				mode.setPixelFormat( openni::PixelFormat::PIXEL_FORMAT_GRAY8 );
-				mode.setResolution( mDeviceOptions.getInfraredSize().x, mDeviceOptions.getInfraredSize().y );
-				mStreamInfrared.setVideoMode( mode );
-				mStreamInfrared.start();
-				mDeviceOptions.enableInfrared( false );
-			}
-		}
-
-		if ( mDeviceOptions.isUserTrackingEnabled() ) {
-			if ( mTrackerUser.create( &mDevice ) != nite::STATUS_OK ) {
-				mDeviceOptions.enableUserTracking( false );
+			if ( mDeviceOptions.isInfraredEnabled() && mStreamInfrared.isValid() ) {
+				success( mStreamInfrared.start() );
 			}
 		}
 	}
@@ -481,17 +568,93 @@ namespace OpenNI
 		return mConnected;
 	}
 
+	void Device::connectColorEventHandler( const VideoStreamListener::EventHandler& eventHandler )
+	{
+		if ( mDeviceOptions.isColorEnabled() ) {
+			mListenerColor = new VideoStreamListener( eventHandler );
+			mStreamColor.addNewFrameListener( mListenerColor );
+		}
+	}
+
+	void Device::connectDepthEventHandler( const VideoStreamListener::EventHandler& eventHandler )
+	{
+		if ( mDeviceOptions.isDepthEnabled() ) {
+			mListenerDepth = new VideoStreamListener( eventHandler );
+			mStreamDepth.addNewFrameListener( mListenerDepth );
+		}
+	}
+
+	void Device::connectHandEventHandler( const HandTrackerListener::EventHandler& eventHandler )
+	{
+		if ( mDeviceOptions.isHandTrackingEnabled() ) {
+			mListenerHand = new HandTrackerListener( eventHandler );
+			mTrackerHand.addNewFrameListener( mListenerHand );
+		}
+	}
+
+	void Device::connectInfraredEventHandler( const VideoStreamListener::EventHandler& eventHandler )
+	{
+		if ( mDeviceOptions.isInfraredEnabled() ) {
+			mListenerInfrared = new VideoStreamListener( eventHandler );
+			mStreamInfrared.addNewFrameListener( mListenerInfrared );
+		}
+	}
+
+	void Device::connectUserEventHandler( const UserTrackerListener::EventHandler& eventHandler )
+	{
+		if ( mDeviceOptions.isUserTrackingEnabled() ) {
+			mListenerUser = new UserTrackerListener( eventHandler );
+			mTrackerUser.addNewFrameListener( mListenerUser );
+		}
+	}
+
 	//////////////////////////////////////////////////////////////////////////////////////////////
 	
 	DeviceManager::DeviceManager()
-		: mInitialized( false )
+		: mDeviceCount( 0 ), mInitialized( false )
 	{
+		initialize();
 	}
 
 	DeviceManager::~DeviceManager()
 	{
-		stop();
 		mDevices.clear();
+		if ( mInitialized ) {
+			openni::OpenNI::removeDeviceConnectedListener( this );
+			openni::OpenNI::removeDeviceDisconnectedListener( this );
+			openni::OpenNI::removeDeviceStateChangedListener( this );
+
+			openni::OpenNI::shutdown();
+			nite::NiTE::shutdown();
+			
+			mInitialized = false;
+		}
+	}
+
+	void DeviceManager::initialize()
+	{
+		if ( !success( openni::OpenNI::initialize() ) ) {
+			return;
+		}
+		if ( !success( nite::NiTE::initialize() ) ) {
+			return;
+		}
+		if ( !success( openni::OpenNI::addDeviceConnectedListener( this ) ) ) {
+			return;
+		}
+		if ( !success( openni::OpenNI::addDeviceDisconnectedListener( this ) ) ) {
+			return;
+		}
+		if ( !success( openni::OpenNI::addDeviceStateChangedListener( this ) ) ) {
+			return;
+		}
+		enumerateDevices();
+		mInitialized = true;
+	}
+
+	bool DeviceManager::isInitialized() const
+	{
+		return mInitialized;
 	}
 
 	DeviceRef DeviceManager::createDevice( const DeviceOptions& deviceOptions )
@@ -532,64 +695,21 @@ namespace OpenNI
 		throw ExcDeviceNotAvailable();
 	}
 
-	void DeviceManager::start()
+	size_t DeviceManager::getDeviceCount() const
 	{
-		console() << "test" << endl;
-		if ( openni::OpenNI::initialize() != openni::STATUS_OK ) {
-			console() << "Unable to initialize OpenNI: " << endl << openni::OpenNI::getExtendedError() << endl;
-			return;
-		}
-		if ( nite::NiTE::initialize() != nite::STATUS_OK ) {
-			console() << "Unable to initialize NiTE: " << endl << openni::OpenNI::getExtendedError() << endl;
-			return;
-		}
-		if ( openni::OpenNI::addDeviceConnectedListener( this ) != openni::STATUS_OK ) {
-			console() << "Unable to add device connected listener: " << endl << openni::OpenNI::getExtendedError() << endl;
-			return;
-		}
-		if ( openni::OpenNI::addDeviceDisconnectedListener( this ) != openni::STATUS_OK ) {
-			console() << "Unable to add device disconnected listener: " << endl << openni::OpenNI::getExtendedError() << endl;
-			return;
-		}
-		if ( openni::OpenNI::addDeviceStateChangedListener( this ) != openni::STATUS_OK ) {
-			console() << "Unable to add device state changed listener: " << endl << openni::OpenNI::getExtendedError() << endl;
-			return;
-		}
+		return mDeviceCount;
+	}
+
+	const std::vector<openni::DeviceInfo>& DeviceManager::getDeviceInfoList() const
+	{
+		return mDeviceInfoList;
+	}
+
+	void DeviceManager::enumerateDevices()
+	{
 		openni::OpenNI::enumerateDevices( &mDeviceInfoArray );
-		mInitialized = true;
-	}
-
-	void DeviceManager::stop()
-	{
-		if ( mInitialized ) {
-			openni::OpenNI::removeDeviceConnectedListener( this );
-			openni::OpenNI::removeDeviceDisconnectedListener( this );
-			openni::OpenNI::removeDeviceStateChangedListener( this );
-
-			try {
-				openni::OpenNI::shutdown();
-			} catch ( ... ) {
-			}
-
-			try {
-				nite::NiTE::shutdown();
-			} catch ( ... ) {
-			}
-
-			mInitialized = false;
-		}
-
-		openni::OpenNI::shutdown();
-	}
-
-	const openni::Array<openni::DeviceInfo>& DeviceManager::getDeviceInfoArray() const
-	{
-		return mDeviceInfoArray;
-	}
-
-	bool DeviceManager::isInitialized() const
-	{
-		return mInitialized;
+		mDeviceInfoList = toVector( mDeviceInfoArray );
+		mDeviceCount	= mDeviceInfoList.size();
 	}
 
 	DeviceRef DeviceManager::getDevice( const std::string& uri )
@@ -618,8 +738,7 @@ namespace OpenNI
 			device->mConnected	= true;
 		} catch ( ExcDeviceNotFound ex ) {
 		}
-
-		openni::OpenNI::enumerateDevices( &mDeviceInfoArray );
+		enumerateDevices();
 	}
 
 	void DeviceManager::onDeviceDisconnected( const openni::DeviceInfo* info )
@@ -630,8 +749,7 @@ namespace OpenNI
 			device->stop();
 		} catch ( ExcDeviceNotFound ex ) {
 		}
-
-		openni::OpenNI::enumerateDevices( &mDeviceInfoArray );
+		enumerateDevices();
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////

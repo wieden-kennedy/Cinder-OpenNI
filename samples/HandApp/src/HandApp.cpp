@@ -35,15 +35,14 @@
 */
 
 #include "cinder/app/AppBasic.h"
-#include "cinder/gl/Texture.h"
 #include "Cinder-OpenNI.h"
 
 /* 
-* This application demonstrates how to display OpenNI's 
-* depth stream.
+* This application demonstrates how to display NiTE hands.
 */
-class BasicApp : public ci::app::AppBasic 
+class HandApp : public ci::app::AppBasic 
 {
+
 public:
 	void					draw();
 	void					keyDown( ci::app::KeyEvent event );
@@ -52,8 +51,7 @@ public:
 private:
 	OpenNI::DeviceManager	mDeviceManager;
 	OpenNI::DeviceRef		mDevice;
-	ci::Channel16u			mChannel;
-	void					onDepth( openni::VideoFrameRef frame );
+	void					onHand( nite::HandTrackerFrameRef );
 
 	void					screenShot();
 };
@@ -66,18 +64,13 @@ using namespace ci::app;
 using namespace std;
 using namespace OpenNI;
 
-void BasicApp::draw()
+void HandApp::draw()
 {
 	gl::setViewport( getWindowBounds() );
 	gl::clear( Colorf::black() );
-
-	if ( mChannel ) {
-		gl::TextureRef texture = gl::Texture::create( Channel8u( mChannel ) );
-		gl::draw( texture, texture->getBounds(), getWindowBounds() );
-	}
 }
 
-void BasicApp::keyDown( KeyEvent event )
+void HandApp::keyDown( KeyEvent event )
 {
 	switch ( event.getCode() ) {
 	case KeyEvent::KEY_q:
@@ -92,44 +85,34 @@ void BasicApp::keyDown( KeyEvent event )
 	}
 }
 
-void BasicApp::onDepth( openni::VideoFrameRef frame )
+void HandApp::onHand( nite::HandTrackerFrameRef )
 {
-	mChannel = OpenNI::toChannel16u( frame );
+
 }
 
-void BasicApp::prepareSettings( Settings* settings )
+void HandApp::prepareSettings( Settings* settings )
 {
 	settings->setFrameRate( 60.0f );
 	settings->setWindowSize( 800, 600 );
 }
 
-void BasicApp::screenShot()
+void HandApp::screenShot()
 {
 	writeImage( getAppPath() / fs::path( "frame" + toString( getElapsedFrames() ) + ".png" ), copyWindowSurface() );
 }
 
-void BasicApp::setup()
+void HandApp::setup()
 {
-	// The device manager automatically initializes OpenNI and NiTE.
-	// It's a good idea to check that initialization is complete
-	// before accessing devices.
-	if ( mDeviceManager.isInitialized() ) {
-
-		// Catching this exception prevents our application
-		// from crashing when no devices are connected.
-		try {
-			mDevice = mDeviceManager.createDevice();
-		} catch ( ExcDeviceNotAvailable ex ) {
-			console() << ex.what() << endl;
-		}
-	
-		// If we've successfully accessed a device, start and add a 
-		// callback for the depth stream.
-		if ( mDevice ) {
-			mDevice->connectDepthEventHandler( &BasicApp::onDepth, this );
-			mDevice->start();
-		}
+	try {
+		mDevice = mDeviceManager.createDevice( OpenNI::DeviceOptions().enableHandTracking() );
+	} catch ( ExcDeviceNotAvailable ex ) {
+		console() << ex.what() << endl;
+		quit();
 	}
+	
+	mDevice->connectHandEventHandler( &HandApp::onHand, this );
+	mDevice->start();
+	mDevice->getHandTracker().startGestureDetection( nite::GestureType::GESTURE_CLICK );
 }
 
-CINDER_APP_BASIC( BasicApp, RendererGl )
+CINDER_APP_BASIC( HandApp, RendererGl )
