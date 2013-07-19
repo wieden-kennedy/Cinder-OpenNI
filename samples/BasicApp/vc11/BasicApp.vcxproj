@@ -123,7 +123,7 @@ xcopy "$(OPENNI2_REDIST)OpenNI2\Drivers\*.dll" "$(ProjectDir)bin\OpenNI2\Drivers
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\src\CinderXtion.cpp" />
+    <ClCompile Include="..\..\..\src\Cinder-OpenNI.cpp" />
     <ClCompile Include="..\src\BasicApp.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -133,7 +133,7 @@ xcopy "$(OPENNI2_REDIST)OpenNI2\Drivers\*.dll" "$(ProjectDir)bin\OpenNI2\Drivers
     <ResourceCompile Include="Resources.rc" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\src\CinderXtion.h" />
+    <ClInclude Include="..\..\..\src\Cinder-OpenNI.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

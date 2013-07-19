@@ -34,11 +34,11 @@
 * 
 */
 
-#include "CinderXtion.h"
+#include "Cinder-OpenNI.h"
 
 #include "cinder/app/App.h"
 
-namespace Xtion
+namespace OpenNI
 {
 	using namespace ci;
 	using namespace ci::app;

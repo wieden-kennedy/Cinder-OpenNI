@@ -41,11 +41,11 @@
 #include "cinder/gl/Texture.h"
 #include "cinder/ImageIo.h"
 #include "cinder/Utilities.h"
-#include "CinderXtion.h"
+#include "Cinder-OpenNI.h"
 
 /* 
 * This application demonstrates how to represent the 
-* Xtion's depth image in 3D space.
+* OpenNI's depth image in 3D space.
 */
 class BasicApp : public ci::app::AppBasic 
 {
@@ -62,8 +62,8 @@ public:
 private:
 	void					onDepth( openni::VideoFrameRef frame );
 
-	Xtion::DeviceManager	mDeviceManager;
-	Xtion::DeviceRef		mDevice;
+	OpenNI::DeviceManager	mDeviceManager;
+	OpenNI::DeviceRef		mDevice;
 
 	ci::Arcball				mArcball;
 	ci::CameraPersp			mCamera;
@@ -74,7 +74,7 @@ private:
 using namespace ci;
 using namespace ci::app;
 using namespace std;
-using namespace Xtion;
+using namespace OpenNI;
 
 void BasicApp::draw()
 {

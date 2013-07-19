@@ -48,7 +48,7 @@
 #include "OpenNI.h"
 #include "Nite.h"
 
-namespace Xtion
+namespace OpenNI
 {
 	ci::AxisAlignedBox3f	toAxisAlignedBox3f( const nite::Point3f& aMin, const nite::Point3f& aMax );
 	ci::Planef				toPlanef( const nite::Point3f& point, const nite::Point3f& normal );
@@ -303,7 +303,7 @@ namespace Xtion
 	{
 	};
 	
-	class ExcDeviceNotAvailable : public Xtion::Exception 
+	class ExcDeviceNotAvailable : public OpenNI::Exception 
 	{
 	  public:
 		ExcDeviceNotAvailable() throw();
@@ -316,7 +316,7 @@ namespace Xtion
 		char mMessage[ 2048 ];
 	};
 
-	class ExcDeviceNotFound : public Xtion::Exception 
+	class ExcDeviceNotFound : public OpenNI::Exception 
 	{
 	  public:
 		ExcDeviceNotFound( const std::string &uri ) throw();

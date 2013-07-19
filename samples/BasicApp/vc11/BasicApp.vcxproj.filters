@@ -13,7 +13,7 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="Blocks\Cinder-Xtion">
+    <Filter Include="Blocks\Cinder-OpenNI">
       <UniqueIdentifier>{afd42048-5c74-46d0-86d0-6f3e74f613c6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -21,8 +21,8 @@
     <ClCompile Include="..\src\BasicApp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\CinderXtion.cpp">
-      <Filter>Blocks\Cinder-Xtion</Filter>
+    <ClCompile Include="..\..\..\src\Cinder-OpenNI.cpp">
+      <Filter>Blocks\Cinder-OpenNI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -36,8 +36,8 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\src\CinderXtion.h">
-      <Filter>Blocks\Cinder-Xtion</Filter>
+    <ClInclude Include="..\..\..\src\Cinder-OpenNI.h">
+      <Filter>Blocks\Cinder-OpenNI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
