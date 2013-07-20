@@ -55,12 +55,11 @@ namespace OpenNI
 		case nite::Status::STATUS_ERROR:
 			console() << "A NiTE error occurred" << endl;
 			return false;
-		case nite::Status::STATUS_OK:
-			return true;
 		case nite::Status::STATUS_OUT_OF_FLOW:
 			console() << "NiTE out of flow error" << endl;
 			return false;
 		}
+		return true;
 	}
 
 	bool success( openni::Status status )
@@ -90,22 +89,6 @@ namespace OpenNI
 	Vec3f toVec3f( const nite::Point3f& v )
 	{
 		return Vec3f( v.x, v.y, v.z );
-	}
-
-	template<typename T> 
-	vector<T> toVector( const nite::Array<T>& a )
-	{
-		vector<T> v;
-		v.insert( v.end(), &a[ 0 ], &a[ a.getSize() ]);
-		return v;
-	}
-
-	template<typename T> 
-	vector<T> toVector( const openni::Array<T>& a )
-	{
-		vector<T> v;
-		v.insert( v.end(), &a[ 0 ], &a[ a.getSize() ]);
-		return v;
 	}
 
 	Channel8u toChannel8u( const openni::VideoFrameRef& f )
@@ -570,7 +553,7 @@ namespace OpenNI
 
 	void Device::connectColorEventHandler( const VideoStreamListener::EventHandler& eventHandler )
 	{
-		if ( mDeviceOptions.isColorEnabled() ) {
+		if ( mDeviceOptions.isColorEnabled() && mStreamColor.isValid() ) {
 			mListenerColor = new VideoStreamListener( eventHandler );
 			mStreamColor.addNewFrameListener( mListenerColor );
 		}
@@ -578,7 +561,7 @@ namespace OpenNI
 
 	void Device::connectDepthEventHandler( const VideoStreamListener::EventHandler& eventHandler )
 	{
-		if ( mDeviceOptions.isDepthEnabled() ) {
+		if ( mDeviceOptions.isDepthEnabled() && mStreamDepth.isValid() ) {
 			mListenerDepth = new VideoStreamListener( eventHandler );
 			mStreamDepth.addNewFrameListener( mListenerDepth );
 		}
@@ -586,7 +569,7 @@ namespace OpenNI
 
 	void Device::connectHandEventHandler( const HandTrackerListener::EventHandler& eventHandler )
 	{
-		if ( mDeviceOptions.isHandTrackingEnabled() ) {
+		if ( mDeviceOptions.isHandTrackingEnabled() && mTrackerHand.isValid() ) {
 			mListenerHand = new HandTrackerListener( eventHandler );
 			mTrackerHand.addNewFrameListener( mListenerHand );
 		}
@@ -594,7 +577,7 @@ namespace OpenNI
 
 	void Device::connectInfraredEventHandler( const VideoStreamListener::EventHandler& eventHandler )
 	{
-		if ( mDeviceOptions.isInfraredEnabled() ) {
+		if ( mDeviceOptions.isInfraredEnabled() && mStreamInfrared.isValid() ) {
 			mListenerInfrared = new VideoStreamListener( eventHandler );
 			mStreamInfrared.addNewFrameListener( mListenerInfrared );
 		}
@@ -602,7 +585,7 @@ namespace OpenNI
 
 	void Device::connectUserEventHandler( const UserTrackerListener::EventHandler& eventHandler )
 	{
-		if ( mDeviceOptions.isUserTrackingEnabled() ) {
+		if ( mDeviceOptions.isUserTrackingEnabled() && mTrackerUser.isValid() ) {
 			mListenerUser = new UserTrackerListener( eventHandler );
 			mTrackerUser.addNewFrameListener( mListenerUser );
 		}
@@ -662,7 +645,6 @@ namespace OpenNI
 		DeviceOptions options = deviceOptions;
 		string uri = options.getUri();
 		if ( !uri.empty() ) {
-
 			try {
 				DeviceRef device = getDevice( uri );
 				return device;
@@ -682,10 +664,10 @@ namespace OpenNI
 
 		int32_t count = mDeviceInfoArray.getSize();
 		for ( int32_t i = 0; i < count; ++i ) {
+			uri = mDeviceInfoArray[ i ].getUri();
 			try {
 				DeviceRef device = getDevice( uri );
 			} catch ( ExcDeviceNotFound ex ) {
-				uri = mDeviceInfoArray[ i ].getUri();
 				options.setUri( uri );
 				mDevices.push_back( new Device( options ) );
 				return &mDevices[ mDevices.size() - 1 ];
@@ -725,6 +707,7 @@ namespace OpenNI
 	void DeviceManager::onDeviceStateChanged( const openni::DeviceInfo* info, openni::DeviceState state ) 
 	{
 		try {
+			console() << "State changed" << endl;
 			DeviceRef device		= getDevice( info->getUri() );
 			device->mDeviceState	= state;
 		} catch ( ExcDeviceNotFound ex ) {
@@ -734,6 +717,7 @@ namespace OpenNI
 	void DeviceManager::onDeviceConnected( const openni::DeviceInfo* info )
 	{
 		try {
+			console() << "Connected" << endl;
 			DeviceRef device	= getDevice( info->getUri() );
 			device->mConnected	= true;
 		} catch ( ExcDeviceNotFound ex ) {
@@ -744,6 +728,7 @@ namespace OpenNI
 	void DeviceManager::onDeviceDisconnected( const openni::DeviceInfo* info )
 	{
 		try {
+			console() << "Disconnected" << endl;
 			DeviceRef device	= getDevice( info->getUri() );
 			device->mConnected	= false;
 			device->stop();
@@ -763,5 +748,4 @@ namespace OpenNI
 	{
 		sprintf( mMessage, "Could not find device: %s", uri.c_str() );
 	}
-
 }

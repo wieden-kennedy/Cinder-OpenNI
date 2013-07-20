@@ -35,6 +35,7 @@
 */
 
 #include "cinder/app/AppBasic.h"
+#include "cinder/Camera.h"
 #include "Cinder-OpenNI.h"
 
 /* 
@@ -44,16 +45,19 @@ class UserApp : public ci::app::AppBasic
 {
 
 public:
-	void					draw();
-	void					keyDown( ci::app::KeyEvent event );
-	void					prepareSettings( ci::app::AppBasic::Settings* settings );
-	void					setup();
+	void						draw();
+	void						keyDown( ci::app::KeyEvent event );
+	void						prepareSettings( ci::app::AppBasic::Settings* settings );
+	void						setup();
 private:
-	OpenNI::DeviceManager	mDeviceManager;
-	OpenNI::DeviceRef		mDevice;
-	void					onUser( nite::UserTrackerFrameRef );
+	ci::CameraPersp				mCamera;
 
-	void					screenShot();
+	OpenNI::DeviceManager		mDeviceManager;
+	OpenNI::DeviceRef			mDevice;
+	std::vector<nite::UserData>	mUsers;
+	void						onUser( nite::UserTrackerFrameRef );
+
+	void						screenShot();
 };
 
 #include "cinder/ImageIo.h"
@@ -62,12 +66,30 @@ private:
 using namespace ci;
 using namespace ci::app;
 using namespace std;
-using namespace OpenNI;
 
 void UserApp::draw()
 {
 	gl::setViewport( getWindowBounds() );
 	gl::clear( Colorf::black() );
+	gl::setMatrices( mCamera );
+
+	gl::color( Colorf( 1.0f, 0.0f, 0.0f ) );
+	for ( std::vector<nite::UserData>::iterator iter = mUsers.begin(); iter != mUsers.end(); ) {
+		if ( iter != mUsers.end() ) {
+			const nite::Skeleton& skeleton = iter->getSkeleton();
+			if ( skeleton.getState() == nite::SKELETON_TRACKED ) {
+				gl::begin( GL_LINES );
+				for ( size_t i = 0; i < (size_t)nite::JOINT_RIGHT_FOOT - 1; ++i ) {
+					Vec3f v0 = OpenNI::toVec3f( skeleton.getJoint( (nite::JointType)i ).getPosition() );
+					Vec3f v1 = OpenNI::toVec3f( skeleton.getJoint( (nite::JointType)( i + 1 ) ).getPosition() );
+					gl::vertex( v0 );
+					gl::vertex( v1 );
+				}
+				gl::end();
+			}
+			++iter;
+		}
+	}
 }
 
 void UserApp::keyDown( KeyEvent event )
@@ -85,9 +107,17 @@ void UserApp::keyDown( KeyEvent event )
 	}
 }
 
-void UserApp::onUser( nite::UserTrackerFrameRef )
+void UserApp::onUser( nite::UserTrackerFrameRef frame )
 {
+	mUsers = OpenNI::toVector( frame.getUsers() );
 
+	for ( std::vector<nite::UserData>::iterator iter = mUsers.begin(); iter != mUsers.end(); ++iter ) {
+		if ( iter->isNew() ) {
+			mDevice->getUserTracker().startSkeletonTracking( iter->getId() );
+		} else if ( iter->isLost() ) {
+			mDevice->getUserTracker().stopSkeletonTracking( iter->getId() );
+		}
+	}
 }
 
 void UserApp::prepareSettings( Settings* settings )
@@ -103,9 +133,12 @@ void UserApp::screenShot()
 
 void UserApp::setup()
 {
+	mCamera = CameraPersp( getWindowWidth(), getWindowHeight(), 45.0f, 1.0f, 5000.0f );
+	mCamera.lookAt( Vec3f( 0.0f, 0.0f, 10.0f ), Vec3f::zero() );
+
 	try {
 		mDevice = mDeviceManager.createDevice( OpenNI::DeviceOptions().enableUserTracking() );
-	} catch ( ExcDeviceNotAvailable ex ) {
+	} catch ( OpenNI::ExcDeviceNotAvailable ex ) {
 		console() << ex.what() << endl;
 		quit();
 	}
