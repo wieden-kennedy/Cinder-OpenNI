@@ -64,7 +64,6 @@ private:
 using namespace ci;
 using namespace ci::app;
 using namespace std;
-using namespace OpenNI;
 
 void BasicApp::draw()
 {
@@ -119,7 +118,7 @@ void BasicApp::setup()
 		// from crashing when no devices are connected.
 		try {
 			mDevice = mDeviceManager.createDevice();
-		} catch ( ExcDeviceNotAvailable ex ) {
+		} catch ( OpenNI::ExcDeviceNotAvailable ex ) {
 			console() << ex.what() << endl;
 		}
 	
