@@ -59,9 +59,20 @@ namespace OpenNI
 	ci::Vec3f				toVec3f( const nite::Point3f& v );
 
 	template<typename T>
-	std::vector<T>			toVector( const nite::Array<T>& a );
+	inline std::vector<T>	toVector( const nite::Array<T>& a )
+	{
+		vector<T> v;
+		v.insert( v.end(), &a[ 0 ], &a[ a.getSize() ]);
+		return v;
+	}
+
 	template<typename T>
-	std::vector<T>			toVector( const openni::Array<T>& a );
+	inline std::vector<T>	toVector( const openni::Array<T>& a )
+	{
+		vector<T> v;
+		v.insert( v.end(), &a[ 0 ], &a[ a.getSize() ]);
+		return v;
+	}
 
 	ci::Channel8u			toChannel8u( const openni::VideoFrameRef& f );
 	ci::Channel16u			toChannel16u( const openni::VideoFrameRef& f );

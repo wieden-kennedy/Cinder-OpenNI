@@ -51,11 +51,13 @@ public:
 private:
 	OpenNI::DeviceManager	mDeviceManager;
 	OpenNI::DeviceRef		mDevice;
-	void					onHand( nite::HandTrackerFrameRef );
+	ci::Channel16u			mChannel;
+	void					onHand( nite::HandTrackerFrameRef frame );
 
 	void					screenShot();
 };
 
+#include "cinder/gl/Texture.h"
 #include "cinder/ImageIo.h"
 #include "cinder/Utilities.h"
 
@@ -68,6 +70,12 @@ void HandApp::draw()
 {
 	gl::setViewport( getWindowBounds() );
 	gl::clear( Colorf::black() );
+
+	if ( mChannel )
+	{
+		gl::TextureRef tex = gl::Texture::create( Channel8u( mChannel ) );
+		gl::draw( tex, tex->getBounds(), getWindowBounds() );
+	}
 }
 
 void HandApp::keyDown( KeyEvent event )
@@ -85,9 +93,30 @@ void HandApp::keyDown( KeyEvent event )
 	}
 }
 
-void HandApp::onHand( nite::HandTrackerFrameRef )
+void HandApp::onHand( nite::HandTrackerFrameRef frame )
 {
+	openni::VideoFrameRef depthFrame	= frame.getDepthFrame();
+	mChannel							= toChannel16u( depthFrame );
 
+	std::vector< nite::GestureData >	gestures		= toVector( frame.getGestures() );
+
+	for ( auto iter = gestures.begin(); iter != gestures.end(); ++iter )
+	{
+		if ( iter->isComplete() )
+		{
+			if ( iter->getType() == nite::GestureType::GESTURE_CLICK )
+			{
+				console() << "CLICK GESTURE" << std::endl;
+			}
+			else if ( iter->getType() == nite::GestureType::GESTURE_WAVE )
+			{
+				console() << "WAVE GESTURE" << std::endl;
+
+				nite::HandId id;
+				mDevice->getHandTracker().startHandTracking( iter->getCurrentPosition(), &id );
+			}
+		}
+	}
 }
 
 void HandApp::prepareSettings( Settings* settings )
@@ -104,7 +133,10 @@ void HandApp::screenShot()
 void HandApp::setup()
 {
 	try {
-		mDevice = mDeviceManager.createDevice( OpenNI::DeviceOptions().enableHandTracking() );
+		mDevice = mDeviceManager.createDevice( OpenNI::DeviceOptions().enableHandTracking().enableUserTracking() );
+	} catch ( ExcDeviceNotFound ex ) {
+		console() << ex.what() << endl;
+		quit();
 	} catch ( ExcDeviceNotAvailable ex ) {
 		console() << ex.what() << endl;
 		quit();
@@ -113,6 +145,7 @@ void HandApp::setup()
 	mDevice->connectHandEventHandler( &HandApp::onHand, this );
 	mDevice->start();
 	mDevice->getHandTracker().startGestureDetection( nite::GestureType::GESTURE_CLICK );
+	mDevice->getHandTracker().startGestureDetection( nite::GestureType::GESTURE_WAVE );
 }
 
 CINDER_APP_BASIC( HandApp, RendererGl )

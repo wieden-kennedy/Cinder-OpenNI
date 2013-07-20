@@ -92,22 +92,6 @@ namespace OpenNI
 		return Vec3f( v.x, v.y, v.z );
 	}
 
-	template<typename T> 
-	vector<T> toVector( const nite::Array<T>& a )
-	{
-		vector<T> v;
-		v.insert( v.end(), &a[ 0 ], &a[ a.getSize() ]);
-		return v;
-	}
-
-	template<typename T> 
-	vector<T> toVector( const openni::Array<T>& a )
-	{
-		vector<T> v;
-		v.insert( v.end(), &a[ 0 ], &a[ a.getSize() ]);
-		return v;
-	}
-
 	Channel8u toChannel8u( const openni::VideoFrameRef& f )
 	{
 		return Channel8u( f.getWidth(), f.getHeight(), f.getStrideInBytes(), 1, (uint8_t*)f.getData() );
@@ -393,7 +377,10 @@ namespace OpenNI
 			}
 
 			if ( mDeviceOptions.isHandTrackingEnabled() ) {
-				success( mTrackerHand.create( &mDevice ) );
+				if ( success( mTrackerHand.create( &mDevice ) ) )
+				{
+					console() << "Hand Tracker!" << std::endl;
+				}
 			}
 
 			if ( mDeviceOptions.isInfraredEnabled() ) {
@@ -406,7 +393,10 @@ namespace OpenNI
 			}
 
 			if ( mDeviceOptions.isUserTrackingEnabled() ) {
-				success( mTrackerUser.create( &mDevice ) );
+				if ( success( mTrackerUser.create( &mDevice ) ) )
+				{
+					console() << "User Tracking!" << endl;
+				}
 			}
 		}
 	}
