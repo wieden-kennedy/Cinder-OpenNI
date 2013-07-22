@@ -47,28 +47,28 @@ class HandApp : public ci::app::AppBasic
 {
 
 public:
-	void					update();
-	void					draw();
-	void					keyDown( ci::app::KeyEvent event );
-	void					prepareSettings( ci::app::AppBasic::Settings* settings );
-	void					setup();
+	void						update();
+	void						draw();
+	void						keyDown( ci::app::KeyEvent event );
+	void						prepareSettings( ci::app::AppBasic::Settings* settings );
+	void						setup();
 private:
-	OpenNI::DeviceManager	mDeviceManager;
-	OpenNI::DeviceRef		mDevice;
-	ci::Channel16u			mChannel;
-	void					onHand( nite::HandTrackerFrameRef frame );
+	OpenNI::DeviceManagerRef	mDeviceManager;
+	OpenNI::DeviceRef			mDevice;
+	ci::Channel16u				mChannel;
+	void						onHand( nite::HandTrackerFrameRef frame );
 
-	void					screenShot();
+	void						screenShot();
 
 	//std::vector< nite::HandData >		mTrackedHands;
 	std::map< nite::HandId, EmitterRef >	mEmitters;
 	std::vector< ParticleRef >				mParticles;
 
-	ci::CameraPersp			mCamera;
-	uint32_t				mParticlesPerFrame;
-	double					mPrevSeconds;
+	ci::CameraPersp				mCamera;
+	uint32_t					mParticlesPerFrame;
+	double						mPrevSeconds;
 
-	static const uint32_t	kMaxParticles;
+	static const uint32_t		kMaxParticles;
 };
 
 #include "cinder/gl/Texture.h"
@@ -84,7 +84,7 @@ const uint32_t HandApp::kMaxParticles		= 500;
 
 void HandApp::update()
 {
-	
+	mDeviceManager->update();
 }
 
 void HandApp::draw()
@@ -242,13 +242,14 @@ void HandApp::setup()
 {
 	mParticlesPerFrame		= 5;
 	mPrevSeconds			= getElapsedSeconds();
+	mDeviceManager			= DeviceManager::create();
 
 	Vec2i windowSize = toPixels( getWindowSize() );
 	mCamera = CameraPersp( windowSize.x, windowSize.y, 45.0f, 0.1f, 10000.0f );
 	mCamera.lookAt( Vec3f::zero(), Vec3f::zAxis(), Vec3f::yAxis() );
 
 	try {
-		mDevice = mDeviceManager.createDevice( OpenNI::DeviceOptions().enableHandTracking() );
+		mDevice = mDeviceManager->createDevice( OpenNI::DeviceOptions().enableHandTracking() );
 	} catch ( ExcDeviceNotFound ex ) {
 		console() << ex.what() << endl;
 		quit();
