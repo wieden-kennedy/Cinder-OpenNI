@@ -376,10 +376,7 @@ namespace OpenNI
 			}
 
 			if ( mDeviceOptions.isHandTrackingEnabled() ) {
-				if ( success( mTrackerHand.create( &mDevice ) ) )
-				{
-					console() << "Hand Tracker!" << std::endl;
-				}
+				success( mTrackerHand.create( &mDevice ) );
 			}
 
 			if ( mDeviceOptions.isInfraredEnabled() ) {
@@ -392,10 +389,7 @@ namespace OpenNI
 			}
 
 			if ( mDeviceOptions.isUserTrackingEnabled() ) {
-				if ( success( mTrackerUser.create( &mDevice ) ) )
-				{
-					console() << "User Tracking!" << endl;
-				}
+				success( mTrackerUser.create( &mDevice ) );
 			}
 		}
 	}
