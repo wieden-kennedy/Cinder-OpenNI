@@ -96,6 +96,8 @@ void UserApp::draw()
 
 				Vec3f v0 = OpenNI::toVec3f( joint0.getPosition() );
 				Vec3f v1 = OpenNI::toVec3f( joint1.getPosition() );
+				v0.x = -v0.x;
+				v1.x = -v1.x;
 
 				gl::vertex( v0 );
 				gl::vertex( v1 );
@@ -171,10 +173,11 @@ void UserApp::setup()
 	} catch ( OpenNI::ExcDeviceNotAvailable ex ) {
 		console() << ex.what() << endl;
 		quit();
+		return;
 	}
 
 	mDevice->getUserTracker().setSkeletonSmoothingFactor( 0.5f );
-	
+
 	mDevice->connectUserEventHandler( &UserApp::onUser, this );
 	mDevice->start();
 }
