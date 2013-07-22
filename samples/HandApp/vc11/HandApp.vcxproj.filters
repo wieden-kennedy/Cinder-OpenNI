@@ -24,6 +24,12 @@
     <ClCompile Include="..\..\..\src\Cinder-OpenNI.cpp">
       <Filter>Blocks\Cinder-OpenNI</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Particle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Emitter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\resources\cinder_app_icon.ico">
@@ -38,6 +44,12 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\src\Cinder-OpenNI.h">
       <Filter>Blocks\Cinder-OpenNI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Particle.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Emitter.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

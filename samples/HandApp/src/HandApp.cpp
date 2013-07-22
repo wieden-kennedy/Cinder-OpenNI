@@ -35,7 +35,10 @@
 */
 
 #include "cinder/app/AppBasic.h"
+#include "cinder/Camera.h"
 #include "Cinder-OpenNI.h"
+#include "Emitter.h"
+#include "Particle.h"
 
 /* 
 * This application demonstrates how to display NiTE hands.
@@ -44,6 +47,7 @@ class HandApp : public ci::app::AppBasic
 {
 
 public:
+	void					update();
 	void					draw();
 	void					keyDown( ci::app::KeyEvent event );
 	void					prepareSettings( ci::app::AppBasic::Settings* settings );
@@ -55,6 +59,12 @@ private:
 	void					onHand( nite::HandTrackerFrameRef frame );
 
 	void					screenShot();
+
+	//std::vector< nite::HandData >		mTrackedHands;
+	std::map< nite::HandId, EmitterRef >	mEmitters;
+	std::vector< ParticleRef >				mParticles;
+
+	ci::CameraPersp			mCamera;
 };
 
 #include "cinder/gl/Texture.h"
@@ -66,16 +76,38 @@ using namespace ci::app;
 using namespace std;
 using namespace OpenNI;
 
+void HandApp::update()
+{
+	
+}
+
 void HandApp::draw()
 {
 	gl::setViewport( getWindowBounds() );
 	gl::clear( Colorf::black() );
 
+	// draw depth stream in 2d
+	gl::setMatricesWindow( getWindowSize() );
+
 	if ( mChannel )
 	{
+		gl::color( Colorf::white() );
 		gl::TextureRef tex = gl::Texture::create( Channel8u( mChannel ) );
 		gl::draw( tex, tex->getBounds(), getWindowBounds() );
 	}
+
+	// draw 3d content
+	gl::setMatrices( mCamera );
+	gl::enableWireframe();
+
+	// draw emitters
+	for ( const auto& emitterPair : mEmitters )
+	{
+		( emitterPair.first % 2 ) ? gl::color( 1.0f, 0.0f, 0.0f ) : gl::color( 0.0f, 0.0f, 1.0f );
+		gl::drawSphere( emitterPair.second->getPosition(), 25.0f );
+	}
+
+	gl::disableWireframe();
 }
 
 void HandApp::keyDown( KeyEvent event )
@@ -104,23 +136,54 @@ void HandApp::onHand( nite::HandTrackerFrameRef frame )
 	{
 		if ( iter->isComplete() )
 		{
-			if ( iter->getType() == nite::GestureType::GESTURE_CLICK )
+			console() << "Gesture Completed: ";
+
+			if ( iter->getType() == nite::GestureType::GESTURE_WAVE )
 			{
-				console() << "CLICK GESTURE" << std::endl;
-			}
-			else if ( iter->getType() == nite::GestureType::GESTURE_WAVE )
-			{
-				console() << "WAVE GESTURE" << std::endl;
+				console() << "WAVE" << endl;
 
 				nite::HandId id;
 				mDevice->getHandTracker().startHandTracking( iter->getCurrentPosition(), &id );
 			}
+			else if ( iter->getType() == nite::GestureType::GESTURE_CLICK )
+			{
+				console() << "CLICK" << endl;
+			}
+			else if ( iter->getType() == nite::GestureType::GESTURE_HAND_RAISE )
+			{
+				console() << "HAND RAISE" << endl;
+			}
+		}
+	}
+
+	auto hands	= toVector( frame.getHands() );
+
+	for ( const auto& hand : hands )
+	{
+		if ( hand.isTracking() && !hand.isLost() )
+		{
+			Vec3f position		= toVec3f( hand.getPosition() );
+			position.x			= -position.x;
+
+			if ( hand.isNew() )
+			{
+				mEmitters.insert( std::make_pair( hand.getId(), Emitter::create( position ) ) );
+			}
+			else
+			{
+				mEmitters.at( hand.getId() )->update( position );
+			}
+		}
+		else
+		{
+			mEmitters.erase( hand.getId() );
 		}
 	}
 }
 
 void HandApp::prepareSettings( Settings* settings )
 {
+	//settings->enableConsoleWindow();
 	settings->setFrameRate( 60.0f );
 	settings->setWindowSize( 800, 600 );
 }
@@ -132,8 +195,12 @@ void HandApp::screenShot()
 
 void HandApp::setup()
 {
+	Vec2i windowSize = toPixels( getWindowSize() );
+	mCamera = CameraPersp( windowSize.x, windowSize.y, 45.0f, 0.1f, 10000.0f );
+	mCamera.lookAt( Vec3f::zero(), Vec3f::zAxis(), Vec3f::yAxis() );
+
 	try {
-		mDevice = mDeviceManager.createDevice( OpenNI::DeviceOptions().enableHandTracking().enableUserTracking() );
+		mDevice = mDeviceManager.createDevice( OpenNI::DeviceOptions().enableHandTracking() );
 	} catch ( ExcDeviceNotFound ex ) {
 		console() << ex.what() << endl;
 		quit();
@@ -144,7 +211,7 @@ void HandApp::setup()
 	
 	mDevice->connectHandEventHandler( &HandApp::onHand, this );
 	mDevice->start();
-	mDevice->getHandTracker().startGestureDetection( nite::GestureType::GESTURE_CLICK );
+	//mDevice->getHandTracker().startGestureDetection( nite::GestureType::GESTURE_CLICK );
 	mDevice->getHandTracker().startGestureDetection( nite::GestureType::GESTURE_WAVE );
 }
 
