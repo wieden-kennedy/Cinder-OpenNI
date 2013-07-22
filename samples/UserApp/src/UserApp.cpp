@@ -39,7 +39,7 @@
 #include "Cinder-OpenNI.h"
 
 /* 
- * This application demonstrates how to display NiTE hands.
+ * This application demonstrates how to display NiTE users.
  */
 class UserApp : public ci::app::AppBasic 
 {
@@ -51,6 +51,17 @@ public:
 	void						setup();
 	void						update();
 private:
+	struct Bone
+	{
+		Bone( nite::JointType a, nite::JointType b )
+			: mJointA( a ), mJointB( b )
+		{
+		}
+		nite::JointType			mJointA;
+		nite::JointType			mJointB;
+	};
+	std::vector<Bone>			mBones;
+
 	ci::CameraPersp				mCamera;
 
 	OpenNI::DeviceManagerRef	mDeviceManager;
@@ -78,13 +89,18 @@ void UserApp::draw()
 	for ( std::vector<nite::UserData>::const_iterator iter = mUsers.begin(); iter != mUsers.end(); ++iter ) {
 		const nite::Skeleton& skeleton = iter->getSkeleton();
 		if ( skeleton.getState() == nite::SKELETON_TRACKED ) {
+			gl::begin( GL_LINES );
+			for ( vector<Bone>::const_iterator iter = mBones.begin(); iter != mBones.end(); ++iter ) {
+				const nite::SkeletonJoint& joint0 = skeleton.getJoint( iter->mJointA );
+				const nite::SkeletonJoint& joint1 = skeleton.getJoint( iter->mJointB );
 
-			console() << "Tracking" << endl;
+				Vec3f v0 = OpenNI::toVec3f( joint0.getPosition() );
+				Vec3f v1 = OpenNI::toVec3f( joint1.getPosition() );
 
-			/*for ( size_t i = 0; i <= 15; ++i ) {
-				nite::SkeletonJoint joint = skeleton.getJoint( (nite::JointType)i );
-				console() << joint.getPosition().x << endl;
-			}*/
+				gl::vertex( v0 );
+				gl::vertex( v1 );
+			}
+			gl::end();
 		}
 	}
 }
@@ -130,8 +146,24 @@ void UserApp::screenShot()
 
 void UserApp::setup()
 {
+	mBones.push_back( Bone( nite::JOINT_HEAD,			nite::JOINT_NECK ) );
+	mBones.push_back( Bone( nite::JOINT_LEFT_SHOULDER,	nite::JOINT_LEFT_ELBOW ) );
+	mBones.push_back( Bone( nite::JOINT_LEFT_ELBOW,		nite::JOINT_LEFT_HAND ) );
+	mBones.push_back( Bone( nite::JOINT_RIGHT_SHOULDER, nite::JOINT_RIGHT_ELBOW ) );
+	mBones.push_back( Bone( nite::JOINT_RIGHT_ELBOW,	nite::JOINT_RIGHT_HAND ) );
+	mBones.push_back( Bone( nite::JOINT_LEFT_SHOULDER,	nite::JOINT_RIGHT_SHOULDER ) );
+	mBones.push_back( Bone( nite::JOINT_LEFT_SHOULDER,	nite::JOINT_TORSO ) );
+	mBones.push_back( Bone( nite::JOINT_RIGHT_SHOULDER, nite::JOINT_TORSO ) );
+	mBones.push_back( Bone( nite::JOINT_TORSO,			nite::JOINT_LEFT_HIP ) );
+	mBones.push_back( Bone( nite::JOINT_TORSO,			nite::JOINT_RIGHT_HIP ) );
+	mBones.push_back( Bone( nite::JOINT_LEFT_HIP,		nite::JOINT_RIGHT_HIP ) );
+	mBones.push_back( Bone( nite::JOINT_LEFT_HIP,		nite::JOINT_LEFT_KNEE ) );
+	mBones.push_back( Bone( nite::JOINT_LEFT_KNEE,		nite::JOINT_LEFT_FOOT ) );
+	mBones.push_back( Bone( nite::JOINT_RIGHT_HIP,		nite::JOINT_RIGHT_KNEE ) );
+	mBones.push_back( Bone( nite::JOINT_RIGHT_KNEE,		nite::JOINT_RIGHT_FOOT ) );
+
 	mCamera = CameraPersp( getWindowWidth(), getWindowHeight(), 45.0f, 1.0f, 5000.0f );
-	mCamera.lookAt( Vec3f( 0.0f, 0.0f, 10.0f ), Vec3f::zero() );
+	mCamera.lookAt( Vec3f::zero(), Vec3f::zAxis(), Vec3f::yAxis() );
 
 	mDeviceManager = OpenNI::DeviceManager::create();
 	try {
@@ -140,6 +172,8 @@ void UserApp::setup()
 		console() << ex.what() << endl;
 		quit();
 	}
+
+	mDevice->getUserTracker().setSkeletonSmoothingFactor( 0.5f );
 	
 	mDevice->connectUserEventHandler( &UserApp::onUser, this );
 	mDevice->start();
