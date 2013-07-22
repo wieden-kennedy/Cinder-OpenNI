@@ -403,33 +403,23 @@ namespace OpenNI
 	Device::~Device()
 	{
 		if ( mListenerColor != 0 ) {
-			if ( mStreamColor.isValid() ) {
-				mStreamColor.removeNewFrameListener( mListenerColor );
-			}
+			mStreamColor.removeNewFrameListener( mListenerColor );
 			delete mListenerColor;
 		}
 		if ( mListenerDepth != 0 ) {
-			if ( mStreamDepth.isValid() ) {
-				mStreamDepth.removeNewFrameListener( mListenerDepth );
-			}
+			mStreamDepth.removeNewFrameListener( mListenerDepth );
 			delete mListenerDepth;
 		}
 		if ( mListenerHand != 0 ) {
-			if ( mTrackerHand.isValid() ) {
-				mTrackerHand.removeNewFrameListener( mListenerHand );
-			}
+			mTrackerHand.removeNewFrameListener( mListenerHand );
 			delete mListenerHand;
 		}
 		if ( mListenerInfrared != 0 ) {
-			if ( mStreamInfrared.isValid() ) {
-				mStreamInfrared.removeNewFrameListener( mListenerInfrared );
-			}
+			mStreamInfrared.removeNewFrameListener( mListenerInfrared );
 			delete mListenerInfrared;
 		}
 		if ( mListenerUser != 0 ) {
-			if ( mTrackerUser.isValid() ) {
-				mTrackerUser.removeNewFrameListener( mListenerUser );
-			}
+			mTrackerUser.removeNewFrameListener( mListenerUser );
 			delete mListenerUser;
 		}
 		

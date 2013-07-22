@@ -39,8 +39,8 @@
 #include "Cinder-OpenNI.h"
 
 /* 
-* This application demonstrates how to display NiTE hands.
-*/
+ * This application demonstrates how to display NiTE hands.
+ */
 class UserApp : public ci::app::AppBasic 
 {
 
@@ -74,7 +74,7 @@ void UserApp::draw()
 	gl::setMatrices( mCamera );
 
 	gl::color( Colorf( 1.0f, 0.0f, 0.0f ) );
-	for ( std::vector<nite::UserData>::iterator iter = mUsers.begin(); iter != mUsers.end(); ) {
+	/*for ( std::vector<nite::UserData>::iterator iter = mUsers.begin(); iter != mUsers.end(); ) {
 		if ( iter != mUsers.end() ) {
 			const nite::Skeleton& skeleton = iter->getSkeleton();
 			if ( skeleton.getState() == nite::SKELETON_TRACKED ) {
@@ -89,7 +89,7 @@ void UserApp::draw()
 			}
 			++iter;
 		}
-	}
+	}*/
 }
 
 void UserApp::keyDown( KeyEvent event )
