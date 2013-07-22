@@ -49,6 +49,7 @@ public:
 	void						keyDown( ci::app::KeyEvent event );
 	void						prepareSettings( ci::app::AppBasic::Settings* settings );
 	void						setup();
+	void						update();
 private:
 	ci::CameraPersp				mCamera;
 
@@ -75,13 +76,12 @@ void UserApp::draw()
 
 	gl::color( Colorf( 1.0f, 0.0f, 0.0f ) );
 	for ( std::vector<nite::UserData>::const_iterator iter = mUsers.begin(); iter != mUsers.end(); ++iter ) {
-		nite::Skeleton skeleton = iter->getSkeleton();
+		const nite::Skeleton& skeleton = iter->getSkeleton();
 		if ( skeleton.getState() == nite::SKELETON_TRACKED ) {
-			
-			nite::SkeletonJoint joint = skeleton.getJoint( (nite::JointType)0 );
-			console() << joint.getPosition().x << endl;
-/*			
-			for ( size_t i = 0; i <= 15; ++i ) {
+
+			console() << "Tracking" << endl;
+
+			/*for ( size_t i = 0; i <= 15; ++i ) {
 				nite::SkeletonJoint joint = skeleton.getJoint( (nite::JointType)i );
 				console() << joint.getPosition().x << endl;
 			}*/
@@ -143,6 +143,11 @@ void UserApp::setup()
 	
 	mDevice->connectUserEventHandler( &UserApp::onUser, this );
 	mDevice->start();
+}
+
+void UserApp::update()
+{
+	mDeviceManager->update();
 }
 
 CINDER_APP_BASIC( UserApp, RendererGl )

@@ -155,7 +155,12 @@ namespace OpenNI
 	class Listener
 	{
 	protected:
+		Listener();
+
+		virtual void				update() = 0;
+
 		std::recursive_mutex		mMutex;
+		bool						mNewFrame;
 	};
 
 	class HandTrackerListener : public Listener, public nite::HandTracker::NewFrameListener
@@ -169,7 +174,9 @@ namespace OpenNI
 
 		EventHandler				mEventHandler;
 		nite::HandTrackerFrameRef	mFrame;
-		
+
+		void						update();
+
 		friend class				Device;
 	};
 
@@ -185,6 +192,8 @@ namespace OpenNI
 		EventHandler				mEventHandler;
 		nite::UserTrackerFrameRef	mFrame;
 
+		void						update();
+
 		friend class				Device;
 	};
 
@@ -199,6 +208,8 @@ namespace OpenNI
 
 		EventHandler				mEventHandler;
 		openni::VideoFrameRef		mFrame;
+
+		void						update();
 
 		friend class				Device;
 	};
@@ -293,6 +304,8 @@ namespace OpenNI
 		VideoStreamListener*					mListenerInfrared;
 		UserTrackerListener*					mListenerUser;
 
+		void									update();
+
 		friend class							DeviceManager;
 	};
 
@@ -314,6 +327,8 @@ namespace OpenNI
 
 		size_t										getDeviceCount() const;
 		const std::vector<openni::DeviceInfo>&		getDeviceInfoList() const;
+
+		void										update();
 	private:
 		DeviceManager();
 

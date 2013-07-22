@@ -302,42 +302,68 @@ namespace OpenNI
 
 	//////////////////////////////////////////////////////////////////////////////////////////////
 
-	HandTrackerListener::HandTrackerListener( HandTrackerListener::EventHandler eventHandler )
-		: nite::HandTracker::NewFrameListener(), mEventHandler( eventHandler )
-	{
-	}
-	
-	UserTrackerListener::UserTrackerListener( UserTrackerListener::EventHandler eventHandler )
-		: nite::UserTracker::NewFrameListener(), mEventHandler( eventHandler )
+	Listener::Listener()
+		: mNewFrame( false )
 	{
 	}
 
-	VideoStreamListener::VideoStreamListener( VideoStreamListener::EventHandler eventHandler )
-		: openni::VideoStream::NewFrameListener(), mEventHandler( eventHandler )
+	HandTrackerListener::HandTrackerListener( HandTrackerListener::EventHandler eventHandler )
+		: Listener(), nite::HandTracker::NewFrameListener(), mEventHandler( eventHandler )
 	{
 	}
 
 	void HandTrackerListener::onNewFrame( nite::HandTracker& tracker )
 	{
 		lock_guard<recursive_mutex> lock( mMutex );
-		if ( success( tracker.readFrame( &mFrame ) ) ) {
+		success( tracker.readFrame( &mFrame ) );
+		mNewFrame = true;
+	}
+
+	void HandTrackerListener::update()
+	{
+		if ( mNewFrame &&  mFrame.isValid() ) {
 			mEventHandler( mFrame );
+			mNewFrame = false;
 		}
+	}
+	
+	UserTrackerListener::UserTrackerListener( UserTrackerListener::EventHandler eventHandler )
+		: Listener(), nite::UserTracker::NewFrameListener(), mEventHandler( eventHandler )
+	{
 	}
 	
 	void UserTrackerListener::onNewFrame( nite::UserTracker& tracker )
 	{
 		lock_guard<recursive_mutex> lock( mMutex );
-		if ( success( tracker.readFrame( &mFrame ) ) ) {
+		success( tracker.readFrame( &mFrame ) );
+		mNewFrame = true;
+	}
+
+	void UserTrackerListener::update()
+	{
+		if ( mNewFrame && mFrame.isValid() ) {
 			mEventHandler( mFrame );
+			mNewFrame = false;
 		}
+	}
+
+	VideoStreamListener::VideoStreamListener( VideoStreamListener::EventHandler eventHandler )
+		: Listener(), openni::VideoStream::NewFrameListener(), mEventHandler( eventHandler )
+	{
 	}
 
 	void VideoStreamListener::onNewFrame( openni::VideoStream& stream ) 
 	{
 		lock_guard<recursive_mutex> lock( mMutex );
-		if ( success( stream.readFrame( &mFrame ) ) ) {
+		success( stream.readFrame( &mFrame ) );
+		mNewFrame = true;
+	}
+
+	void VideoStreamListener::update()
+	{
+		if ( mNewFrame && mFrame.isValid() ) {
 			mEventHandler( mFrame );
+			mNewFrame = false;
 		}
 	}
 
@@ -584,6 +610,25 @@ namespace OpenNI
 		}
 	}
 
+	void Device::update()
+	{
+		if ( mListenerColor != 0 ) {
+			mListenerColor->update();
+		}
+		if ( mListenerDepth != 0 ) {
+			mListenerDepth->update();
+		}
+		if ( mListenerHand != 0 ) {
+			mListenerHand->update();
+		}
+		if ( mListenerInfrared != 0 ) {
+			mListenerInfrared->update();
+		}
+		if ( mListenerUser != 0 ) {
+			mListenerUser->update();
+		}
+	}
+
 	//////////////////////////////////////////////////////////////////////////////////////////////
 	
 	DeviceManagerRef DeviceManager::create()
@@ -683,6 +728,13 @@ namespace OpenNI
 	const std::vector<openni::DeviceInfo>& DeviceManager::getDeviceInfoList() const
 	{
 		return mDeviceInfoList;
+	}
+
+	void DeviceManager::update()
+	{
+		for ( DeviceList::iterator iter = mDevices.begin(); iter != mDevices.end(); ++iter ) {
+			iter->update();
+		}
 	}
 
 	void DeviceManager::enumerateDevices()
