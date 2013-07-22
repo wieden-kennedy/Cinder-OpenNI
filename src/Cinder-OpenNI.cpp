@@ -315,13 +315,15 @@ namespace OpenNI
 	void HandTrackerListener::onNewFrame( nite::HandTracker& tracker )
 	{
 		lock_guard<recursive_mutex> lock( mMutex );
-		success( tracker.readFrame( &mFrame ) );
-		mNewFrame = true;
+		if ( !mNewFrame ) {
+			success( tracker.readFrame( &mFrame ) );
+			mNewFrame = true;
+		}
 	}
 
 	void HandTrackerListener::update()
 	{
-		if ( mNewFrame &&  mFrame.isValid() ) {
+		if ( mNewFrame && mFrame.isValid() ) {
 			mEventHandler( mFrame );
 			mNewFrame = false;
 		}
@@ -335,8 +337,10 @@ namespace OpenNI
 	void UserTrackerListener::onNewFrame( nite::UserTracker& tracker )
 	{
 		lock_guard<recursive_mutex> lock( mMutex );
-		success( tracker.readFrame( &mFrame ) );
-		mNewFrame = true;
+		if ( !mNewFrame ) {
+			success( tracker.readFrame( &mFrame ) );
+			mNewFrame = true;
+		}
 	}
 
 	void UserTrackerListener::update()
@@ -355,8 +359,10 @@ namespace OpenNI
 	void VideoStreamListener::onNewFrame( openni::VideoStream& stream ) 
 	{
 		lock_guard<recursive_mutex> lock( mMutex );
-		success( stream.readFrame( &mFrame ) );
-		mNewFrame = true;
+		if ( !mNewFrame ) {
+			success( stream.readFrame( &mFrame ) );
+			mNewFrame = true;
+		}
 	}
 
 	void VideoStreamListener::update()
