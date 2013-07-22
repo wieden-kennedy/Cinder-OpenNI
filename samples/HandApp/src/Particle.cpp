@@ -18,6 +18,12 @@ Particle::Particle( const ci::Vec3f& position ) :
 
 	// random age
 	mAge	= ci::randFloat( kLifeSpan * 0.75f );
+
+	// random drag
+	mDrag	= ci::randFloat( 0.5f, 0.9f );
+
+	// random color
+	mColor	= ci::Color( ci::randFloat(), ci::randFloat(), ci::randFloat() );
 }
 
 Particle::~Particle()
@@ -36,6 +42,6 @@ void Particle::update( double elapsedSeconds )
 	}
 
 	mAcceleration	*= mDrag;
-	mVelocity		+= mAcceleration;
+	mVelocity		+= ( mVelocity.length() < kMaxSpeed ) ? mAcceleration : ci::Vec3f::zero();
 	mPosition		+= mVelocity;
 }

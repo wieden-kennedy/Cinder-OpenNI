@@ -65,6 +65,10 @@ private:
 	std::vector< ParticleRef >				mParticles;
 
 	ci::CameraPersp			mCamera;
+	uint32_t				mParticlesPerFrame;
+	double					mPrevSeconds;
+
+	static const uint32_t	kMaxParticles;
 };
 
 #include "cinder/gl/Texture.h"
@@ -76,6 +80,8 @@ using namespace ci::app;
 using namespace std;
 using namespace OpenNI;
 
+const uint32_t HandApp::kMaxParticles		= 500;
+
 void HandApp::update()
 {
 	
@@ -83,6 +89,10 @@ void HandApp::update()
 
 void HandApp::draw()
 {
+	double currentSeconds	= getElapsedSeconds();
+	double elapsedSeconds	= currentSeconds - mPrevSeconds;
+	mPrevSeconds			= currentSeconds;
+
 	gl::setViewport( getWindowBounds() );
 	gl::clear( Colorf::black() );
 
@@ -105,9 +115,44 @@ void HandApp::draw()
 	{
 		( emitterPair.first % 2 ) ? gl::color( 1.0f, 0.0f, 0.0f ) : gl::color( 0.0f, 0.0f, 1.0f );
 		gl::drawSphere( emitterPair.second->getPosition(), 25.0f );
+
+		if ( mParticles.size() <= kMaxParticles )
+		{
+			for ( uint32_t i = 0; i < mParticlesPerFrame; ++i )
+			{
+				mParticles.push_back( Particle::create( emitterPair.second->getPosition() ) );
+			}
+		}
 	}
 
 	gl::disableWireframe();
+
+	for ( auto iter = mParticles.begin(); iter != mParticles.end(); )
+	{
+		(*iter)->update( elapsedSeconds );
+
+		if ( !(*iter)->isDead() )
+		{
+			gl::color( (*iter)->getColor() );
+			gl::drawSphere( (*iter)->getPosition(), 5.0f );
+			++iter;
+		}
+		else
+		{
+			iter = mParticles.erase( iter );
+		}
+	}
+
+	/*for ( const auto& particle : mParticles )
+	{
+		particle->update( elapsedSeconds );
+
+		if ( !particle->isDead() )
+		{
+			gl::color( particle->getColor() );
+			gl::drawSphere( particle->getPosition(), 5.0f );
+		}
+	}*/
 }
 
 void HandApp::keyDown( KeyEvent event )
@@ -195,6 +240,9 @@ void HandApp::screenShot()
 
 void HandApp::setup()
 {
+	mParticlesPerFrame		= 5;
+	mPrevSeconds			= getElapsedSeconds();
+
 	Vec2i windowSize = toPixels( getWindowSize() );
 	mCamera = CameraPersp( windowSize.x, windowSize.y, 45.0f, 0.1f, 10000.0f );
 	mCamera.lookAt( Vec3f::zero(), Vec3f::zAxis(), Vec3f::yAxis() );
