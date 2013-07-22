@@ -291,11 +291,13 @@ namespace OpenNI
 
 	//////////////////////////////////////////////////////////////////////////////////////////////
 
+	typedef std::shared_ptr<DeviceManager>			DeviceManagerRef;
+
 	class DeviceManager : public openni::OpenNI::DeviceConnectedListener, 
 		public openni::OpenNI::DeviceDisconnectedListener, public openni::OpenNI::DeviceStateChangedListener
 	{
 	public:
-		DeviceManager();
+		static DeviceManagerRef						create();
 		~DeviceManager();
 		
 		void										initialize();
@@ -306,6 +308,8 @@ namespace OpenNI
 		size_t										getDeviceCount() const;
 		const std::vector<openni::DeviceInfo>&		getDeviceInfoList() const;
 	private:
+		DeviceManager();
+
 		void										enumerateDevices();
 		DeviceRef									getDevice( const std::string& uri );
 		size_t										mDeviceCount;

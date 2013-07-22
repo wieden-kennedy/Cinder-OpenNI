@@ -589,6 +589,11 @@ namespace OpenNI
 
 	//////////////////////////////////////////////////////////////////////////////////////////////
 	
+	DeviceManagerRef DeviceManager::create()
+	{
+		return DeviceManagerRef( new DeviceManager() );
+	}
+
 	DeviceManager::DeviceManager()
 		: mDeviceCount( 0 ), mInitialized( false )
 	{

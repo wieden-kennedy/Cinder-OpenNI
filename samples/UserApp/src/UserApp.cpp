@@ -52,7 +52,7 @@ public:
 private:
 	ci::CameraPersp				mCamera;
 
-	OpenNI::DeviceManager		mDeviceManager;
+	OpenNI::DeviceManagerRef	mDeviceManager;
 	OpenNI::DeviceRef			mDevice;
 	std::vector<nite::UserData>	mUsers;
 	void						onUser( nite::UserTrackerFrameRef );
@@ -74,22 +74,19 @@ void UserApp::draw()
 	gl::setMatrices( mCamera );
 
 	gl::color( Colorf( 1.0f, 0.0f, 0.0f ) );
-	/*for ( std::vector<nite::UserData>::iterator iter = mUsers.begin(); iter != mUsers.end(); ) {
-		if ( iter != mUsers.end() ) {
-			const nite::Skeleton& skeleton = iter->getSkeleton();
-			if ( skeleton.getState() == nite::SKELETON_TRACKED ) {
-				gl::begin( GL_LINES );
-				for ( size_t i = 0; i < (size_t)nite::JOINT_RIGHT_FOOT - 1; ++i ) {
-					Vec3f v0 = OpenNI::toVec3f( skeleton.getJoint( (nite::JointType)i ).getPosition() );
-					Vec3f v1 = OpenNI::toVec3f( skeleton.getJoint( (nite::JointType)( i + 1 ) ).getPosition() );
-					gl::vertex( v0 );
-					gl::vertex( v1 );
-				}
-				gl::end();
+	for ( std::vector<nite::UserData>::iterator iter = mUsers.begin(); iter != mUsers.end(); ++iter ) {
+		const nite::Skeleton& skeleton = iter->getSkeleton();
+		/*if ( skeleton.getState() == nite::SKELETON_TRACKED ) {
+			gl::begin( GL_LINES );
+			for ( size_t i = 0; i < (size_t)nite::JOINT_RIGHT_FOOT - 1; ++i ) {
+				Vec3f v0 = OpenNI::toVec3f( skeleton.getJoint( (nite::JointType)i ).getPosition() );
+				Vec3f v1 = OpenNI::toVec3f( skeleton.getJoint( (nite::JointType)( i + 1 ) ).getPosition() );
+				gl::vertex( v0 );
+				gl::vertex( v1 );
 			}
-			++iter;
-		}
-	}*/
+			gl::end();
+		}*/
+	}
 }
 
 void UserApp::keyDown( KeyEvent event )
@@ -136,8 +133,9 @@ void UserApp::setup()
 	mCamera = CameraPersp( getWindowWidth(), getWindowHeight(), 45.0f, 1.0f, 5000.0f );
 	mCamera.lookAt( Vec3f( 0.0f, 0.0f, 10.0f ), Vec3f::zero() );
 
+	mDeviceManager = OpenNI::DeviceManager::create();
 	try {
-		mDevice = mDeviceManager.createDevice( OpenNI::DeviceOptions().enableUserTracking() );
+		mDevice = mDeviceManager->createDevice( OpenNI::DeviceOptions().enableUserTracking() );
 	} catch ( OpenNI::ExcDeviceNotAvailable ex ) {
 		console() << ex.what() << endl;
 		quit();
