@@ -74,18 +74,18 @@ void UserApp::draw()
 	gl::setMatrices( mCamera );
 
 	gl::color( Colorf( 1.0f, 0.0f, 0.0f ) );
-	for ( std::vector<nite::UserData>::iterator iter = mUsers.begin(); iter != mUsers.end(); ++iter ) {
-		const nite::Skeleton& skeleton = iter->getSkeleton();
-		/*if ( skeleton.getState() == nite::SKELETON_TRACKED ) {
-			gl::begin( GL_LINES );
-			for ( size_t i = 0; i < (size_t)nite::JOINT_RIGHT_FOOT - 1; ++i ) {
-				Vec3f v0 = OpenNI::toVec3f( skeleton.getJoint( (nite::JointType)i ).getPosition() );
-				Vec3f v1 = OpenNI::toVec3f( skeleton.getJoint( (nite::JointType)( i + 1 ) ).getPosition() );
-				gl::vertex( v0 );
-				gl::vertex( v1 );
-			}
-			gl::end();
-		}*/
+	for ( std::vector<nite::UserData>::const_iterator iter = mUsers.begin(); iter != mUsers.end(); ++iter ) {
+		nite::Skeleton skeleton = iter->getSkeleton();
+		if ( skeleton.getState() == nite::SKELETON_TRACKED ) {
+			
+			nite::SkeletonJoint joint = skeleton.getJoint( (nite::JointType)0 );
+			console() << joint.getPosition().x << endl;
+/*			
+			for ( size_t i = 0; i <= 15; ++i ) {
+				nite::SkeletonJoint joint = skeleton.getJoint( (nite::JointType)i );
+				console() << joint.getPosition().x << endl;
+			}*/
+		}
 	}
 }
 

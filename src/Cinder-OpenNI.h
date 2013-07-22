@@ -47,6 +47,7 @@
 #include "cinder/Utilities.h"
 #include "Nite.h"
 #include "OpenNI.h"
+#include <mutex>
 
 namespace OpenNI
 {
@@ -151,7 +152,13 @@ namespace OpenNI
 	
 	class Device;
 
-	class HandTrackerListener : nite::HandTracker::NewFrameListener
+	class Listener
+	{
+	protected:
+		std::recursive_mutex		mMutex;
+	};
+
+	class HandTrackerListener : public Listener, public nite::HandTracker::NewFrameListener
 	{
 	public:
 		void						onNewFrame( nite::HandTracker& tracker );
@@ -166,7 +173,7 @@ namespace OpenNI
 		friend class				Device;
 	};
 
-	class UserTrackerListener : nite::UserTracker::NewFrameListener
+	class UserTrackerListener : public Listener, public nite::UserTracker::NewFrameListener
 	{
 	public:
 		void						onNewFrame( nite::UserTracker& tracker );
@@ -181,7 +188,7 @@ namespace OpenNI
 		friend class				Device;
 	};
 
-	class VideoStreamListener : public openni::VideoStream::NewFrameListener
+	class VideoStreamListener : public Listener, public openni::VideoStream::NewFrameListener
 	{
 	public:
 		void						onNewFrame( openni::VideoStream& stream );
