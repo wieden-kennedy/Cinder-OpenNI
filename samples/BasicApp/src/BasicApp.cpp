@@ -45,17 +45,18 @@
 class BasicApp : public ci::app::AppBasic 
 {
 public:
-	void					draw();
-	void					keyDown( ci::app::KeyEvent event );
-	void					prepareSettings( ci::app::AppBasic::Settings* settings );
-	void					setup();
+	void						draw();
+	void						update();
+	void						keyDown( ci::app::KeyEvent event );
+	void						prepareSettings( ci::app::AppBasic::Settings* settings );
+	void						setup();
 private:
-	OpenNI::DeviceManager	mDeviceManager;
-	OpenNI::DeviceRef		mDevice;
-	ci::Channel16u			mChannel;
-	void					onDepth( openni::VideoFrameRef frame );
+	OpenNI::DeviceManagerRef	mDeviceManager;
+	OpenNI::DeviceRef			mDevice;
+	ci::Channel16u				mChannel;
+	void						onDepth( openni::VideoFrameRef frame, OpenNI::DeviceOptions deviceOptions );
 
-	void					screenShot();
+	void						screenShot();
 };
 
 #include "cinder/ImageIo.h"
@@ -72,8 +73,13 @@ void BasicApp::draw()
 
 	if ( mChannel ) {
 		gl::TextureRef texture = gl::Texture::create( Channel8u( mChannel ) );
-		gl::draw( texture, texture->getBounds(), getWindowBounds() );
+		gl::draw( texture, Vec2f::zero() );
 	}
+}
+
+void BasicApp::update()
+{
+	mDeviceManager->update();
 }
 
 void BasicApp::keyDown( KeyEvent event )
@@ -91,7 +97,7 @@ void BasicApp::keyDown( KeyEvent event )
 	}
 }
 
-void BasicApp::onDepth( openni::VideoFrameRef frame )
+void BasicApp::onDepth( openni::VideoFrameRef frame, OpenNI::DeviceOptions deviceOptions )
 {
 	mChannel = OpenNI::toChannel16u( frame );
 }
@@ -112,12 +118,14 @@ void BasicApp::setup()
 	// The device manager automatically initializes OpenNI and NiTE.
 	// It's a good idea to check that initialization is complete
 	// before accessing devices.
-	if ( mDeviceManager.isInitialized() ) {
+	mDeviceManager		= OpenNI::DeviceManager::create();
+
+	if ( mDeviceManager->isInitialized() ) {
 
 		// Catching this exception prevents our application
 		// from crashing when no devices are connected.
 		try {
-			mDevice = mDeviceManager.createDevice();
+			mDevice = mDeviceManager->createDevice();
 		} catch ( OpenNI::ExcDeviceNotAvailable ex ) {
 			console() << ex.what() << endl;
 		}
