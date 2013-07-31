@@ -155,9 +155,11 @@ namespace OpenNI
 	class Listener
 	{
 	protected:
-		Listener();
+		Listener( DeviceOptions& deviceOptions );
 
 		virtual void				update() = 0;
+
+		DeviceOptions&				mDeviceOptions;
 
 		std::recursive_mutex		mMutex;
 		bool						mNewFrame;
@@ -168,9 +170,9 @@ namespace OpenNI
 	public:
 		void						onNewFrame( nite::HandTracker& tracker );
 	private:
-		typedef std::function<void ( nite::HandTrackerFrameRef )> EventHandler;
+		typedef std::function<void ( nite::HandTrackerFrameRef, DeviceOptions )> EventHandler;
 		
-		HandTrackerListener( EventHandler eventHandler );
+		HandTrackerListener( EventHandler eventHandler, DeviceOptions& deviceOptions );
 
 		EventHandler				mEventHandler;
 		nite::HandTrackerFrameRef	mFrame;
@@ -185,9 +187,9 @@ namespace OpenNI
 	public:
 		void						onNewFrame( nite::UserTracker& tracker );
 	private:
-		typedef std::function<void ( nite::UserTrackerFrameRef )> EventHandler;
+		typedef std::function<void ( nite::UserTrackerFrameRef, DeviceOptions )> EventHandler;
 		
-		UserTrackerListener( EventHandler eventHandler );
+		UserTrackerListener( EventHandler eventHandler, DeviceOptions& deviceOptions );
 
 		EventHandler				mEventHandler;
 		nite::UserTrackerFrameRef	mFrame;
@@ -202,9 +204,9 @@ namespace OpenNI
 	public:
 		void						onNewFrame( openni::VideoStream& stream );
 	private:
-		typedef std::function<void ( openni::VideoFrameRef )> EventHandler;
+		typedef std::function<void ( openni::VideoFrameRef, DeviceOptions )> EventHandler;
 		
-		VideoStreamListener( EventHandler eventHandler );
+		VideoStreamListener( EventHandler eventHandler, DeviceOptions& deviceOptions );
 
 		EventHandler				mEventHandler;
 		openni::VideoFrameRef		mFrame;
@@ -256,31 +258,31 @@ namespace OpenNI
 		template<typename T, typename Y>
 		inline void					connectColorEventHandler( T callback, Y* callbackObject )
 		{
-			connectColorEventHandler( std::bind( callback, callbackObject, std::placeholders::_1 ) );
+			connectColorEventHandler( std::bind( callback, callbackObject, std::placeholders::_1, std::placeholders::_2 ) );
 		}
 
 		template<typename T, typename Y>
 		inline void					connectDepthEventHandler( T callback, Y* callbackObject )
 		{
-			connectDepthEventHandler( std::bind( callback, callbackObject, std::placeholders::_1 ) );
+			connectDepthEventHandler( std::bind( callback, callbackObject, std::placeholders::_1, std::placeholders::_2 ) );
 		}
 
 		template<typename T, typename Y>
 		inline void					connectHandEventHandler( T callback, Y* callbackObject )
 		{
-			connectHandEventHandler( std::bind( callback, callbackObject, std::placeholders::_1 ) );
+			connectHandEventHandler( std::bind( callback, callbackObject, std::placeholders::_1, std::placeholders::_2 ) );
 		}
 
 		template<typename T, typename Y>
 		inline void					connectInfraredEventHandler( T callback, Y* callbackObject )
 		{
-			connectInfraredEventHandler( std::bind( callback, callbackObject, std::placeholders::_1 ) );
+			connectInfraredEventHandler( std::bind( callback, callbackObject, std::placeholders::_1, std::placeholders::_2 ) );
 		}
 
 		template<typename T, typename Y>
 		inline void					connectUserEventHandler( T callback, Y* callbackObject )
 		{
-			connectUserEventHandler( std::bind( callback, callbackObject, std::placeholders::_1 ) );
+			connectUserEventHandler( std::bind( callback, callbackObject, std::placeholders::_1, std::placeholders::_2 ) );
 		}
 	private:
 		Device( const DeviceOptions& deviceOptions );

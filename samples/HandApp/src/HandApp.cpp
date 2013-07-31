@@ -56,7 +56,7 @@ private:
 	OpenNI::DeviceManagerRef	mDeviceManager;
 	OpenNI::DeviceRef			mDevice;
 	ci::Channel16u				mChannel;
-	void						onHand( nite::HandTrackerFrameRef frame );
+	void						onHand( nite::HandTrackerFrameRef frame, OpenNI::DeviceOptions deviceOptions );
 
 	void						screenShot();
 
@@ -170,7 +170,7 @@ void HandApp::keyDown( KeyEvent event )
 	}
 }
 
-void HandApp::onHand( nite::HandTrackerFrameRef frame )
+void HandApp::onHand( nite::HandTrackerFrameRef frame, DeviceOptions deviceOptions )
 {
 	openni::VideoFrameRef depthFrame	= frame.getDepthFrame();
 	mChannel							= toChannel16u( depthFrame );
@@ -256,6 +256,7 @@ void HandApp::setup()
 	} catch ( ExcDeviceNotAvailable ex ) {
 		console() << ex.what() << endl;
 		quit();
+		return;
 	}
 	
 	mDevice->connectHandEventHandler( &HandApp::onHand, this );

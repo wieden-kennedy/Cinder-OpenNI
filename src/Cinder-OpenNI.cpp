@@ -302,13 +302,13 @@ namespace OpenNI
 
 	//////////////////////////////////////////////////////////////////////////////////////////////
 
-	Listener::Listener()
-		: mNewFrame( false )
+	Listener::Listener( DeviceOptions& deviceOptions )
+		: mDeviceOptions( deviceOptions ), mNewFrame( false )
 	{
 	}
 
-	HandTrackerListener::HandTrackerListener( HandTrackerListener::EventHandler eventHandler )
-		: Listener(), nite::HandTracker::NewFrameListener(), mEventHandler( eventHandler )
+	HandTrackerListener::HandTrackerListener( HandTrackerListener::EventHandler eventHandler, DeviceOptions& deviceOptions )
+		: Listener( deviceOptions ), nite::HandTracker::NewFrameListener(), mEventHandler( eventHandler )
 	{
 	}
 
@@ -324,13 +324,13 @@ namespace OpenNI
 	void HandTrackerListener::update()
 	{
 		if ( mNewFrame && mFrame.isValid() ) {
-			mEventHandler( mFrame );
+			mEventHandler( mFrame, mDeviceOptions );
 			mNewFrame = false;
 		}
 	}
 	
-	UserTrackerListener::UserTrackerListener( UserTrackerListener::EventHandler eventHandler )
-		: Listener(), nite::UserTracker::NewFrameListener(), mEventHandler( eventHandler )
+	UserTrackerListener::UserTrackerListener( UserTrackerListener::EventHandler eventHandler, DeviceOptions& deviceOptions )
+		: Listener( deviceOptions ), nite::UserTracker::NewFrameListener(), mEventHandler( eventHandler )
 	{
 	}
 	
@@ -346,13 +346,13 @@ namespace OpenNI
 	void UserTrackerListener::update()
 	{
 		if ( mNewFrame && mFrame.isValid() ) {
-			mEventHandler( mFrame );
+			mEventHandler( mFrame, mDeviceOptions );
 			mNewFrame = false;
 		}
 	}
 
-	VideoStreamListener::VideoStreamListener( VideoStreamListener::EventHandler eventHandler )
-		: Listener(), openni::VideoStream::NewFrameListener(), mEventHandler( eventHandler )
+	VideoStreamListener::VideoStreamListener( VideoStreamListener::EventHandler eventHandler, DeviceOptions& deviceOptions )
+		: Listener( deviceOptions ), openni::VideoStream::NewFrameListener(), mEventHandler( eventHandler )
 	{
 	}
 
@@ -368,7 +368,7 @@ namespace OpenNI
 	void VideoStreamListener::update()
 	{
 		if ( mNewFrame && mFrame.isValid() ) {
-			mEventHandler( mFrame );
+			mEventHandler( mFrame, mDeviceOptions );
 			mNewFrame = false;
 		}
 	}
@@ -579,7 +579,7 @@ namespace OpenNI
 	void Device::connectColorEventHandler( const VideoStreamListener::EventHandler& eventHandler )
 	{
 		if ( mDeviceOptions.isColorEnabled() && mStreamColor.isValid() ) {
-			mListenerColor = new VideoStreamListener( eventHandler );
+			mListenerColor = new VideoStreamListener( eventHandler, mDeviceOptions );
 			mStreamColor.addNewFrameListener( mListenerColor );
 		}
 	}
@@ -587,7 +587,7 @@ namespace OpenNI
 	void Device::connectDepthEventHandler( const VideoStreamListener::EventHandler& eventHandler )
 	{
 		if ( mDeviceOptions.isDepthEnabled() && mStreamDepth.isValid() ) {
-			mListenerDepth = new VideoStreamListener( eventHandler );
+			mListenerDepth = new VideoStreamListener( eventHandler, mDeviceOptions );
 			mStreamDepth.addNewFrameListener( mListenerDepth );
 		}
 	}
@@ -595,7 +595,7 @@ namespace OpenNI
 	void Device::connectHandEventHandler( const HandTrackerListener::EventHandler& eventHandler )
 	{
 		if ( mDeviceOptions.isHandTrackingEnabled() && mTrackerHand.isValid() ) {
-			mListenerHand = new HandTrackerListener( eventHandler );
+			mListenerHand = new HandTrackerListener( eventHandler, mDeviceOptions );
 			mTrackerHand.addNewFrameListener( mListenerHand );
 		}
 	}
@@ -603,7 +603,7 @@ namespace OpenNI
 	void Device::connectInfraredEventHandler( const VideoStreamListener::EventHandler& eventHandler )
 	{
 		if ( mDeviceOptions.isInfraredEnabled() && mStreamInfrared.isValid() ) {
-			mListenerInfrared = new VideoStreamListener( eventHandler );
+			mListenerInfrared = new VideoStreamListener( eventHandler, mDeviceOptions );
 			mStreamInfrared.addNewFrameListener( mListenerInfrared );
 		}
 	}
@@ -611,7 +611,7 @@ namespace OpenNI
 	void Device::connectUserEventHandler( const UserTrackerListener::EventHandler& eventHandler )
 	{
 		if ( mDeviceOptions.isUserTrackingEnabled() && mTrackerUser.isValid() ) {
-			mListenerUser = new UserTrackerListener( eventHandler );
+			mListenerUser = new UserTrackerListener( eventHandler, mDeviceOptions );
 			mTrackerUser.addNewFrameListener( mListenerUser );
 		}
 	}
