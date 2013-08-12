@@ -1,6 +1,10 @@
 /*
 * 
-* Copyright (c) 2013, Ban the Rewind
+* Copyright (c) 2013, Wieden+Kennedy
+* 
+* Stephen Schieberl
+* Michael Latzoni
+*
 * All rights reserved.
 * 
 * Redistribution and use in source and binary forms, with or 
@@ -36,6 +40,8 @@
 
 #include "cinder/app/AppBasic.h"
 #include "cinder/Camera.h"
+#include "cinder/Channel.h"
+#include "cinder/gl/Texture.h"
 #include "Cinder-OpenNI.h"
 
 /* 
@@ -60,14 +66,16 @@ private:
 		nite::JointType			mJointA;
 		nite::JointType			mJointB;
 	};
-	std::vector<Bone>			mBones;
-
+	
 	ci::CameraPersp				mCamera;
 
+	std::vector<Bone>			mBones;
+	ci::Channel16u				mChannel;
 	OpenNI::DeviceManagerRef	mDeviceManager;
 	OpenNI::DeviceRef			mDevice;
+	ci::gl::TextureRef			mTexture;
 	std::vector<nite::UserData>	mUsers;
-	void						onUser( nite::UserTrackerFrameRef );
+	void						onUser( nite::UserTrackerFrameRef, const OpenNI::DeviceOptions& deviceOptions );
 
 	void						screenShot();
 };
@@ -83,8 +91,19 @@ void UserApp::draw()
 {
 	gl::setViewport( getWindowBounds() );
 	gl::clear( Colorf::black() );
-	gl::setMatrices( mCamera );
+	gl::setMatricesWindow( getWindowSize() );
 
+	gl::color( Colorf::white() );
+	if ( mChannel ) {
+		if ( mTexture ) {
+			mTexture->update( Channel32f( mChannel ) );
+		} else {
+			mTexture = gl::Texture::create( Channel32f( mChannel ) );
+		}
+		gl::draw( mTexture, mTexture->getBounds(), getWindowBounds() );
+	}
+
+	gl::setMatrices( mCamera );
 	gl::color( Colorf( 1.0f, 0.0f, 0.0f ) );
 	for ( std::vector<nite::UserData>::const_iterator iter = mUsers.begin(); iter != mUsers.end(); ++iter ) {
 		const nite::Skeleton& skeleton = iter->getSkeleton();
@@ -122,11 +141,11 @@ void UserApp::keyDown( KeyEvent event )
 	}
 }
 
-void UserApp::onUser( nite::UserTrackerFrameRef frame )
+void UserApp::onUser( nite::UserTrackerFrameRef frame, const OpenNI::DeviceOptions& deviceOptions )
 {
-	mUsers = OpenNI::toVector( frame.getUsers() );
-
-	for ( std::vector<nite::UserData>::iterator iter = mUsers.begin(); iter != mUsers.end(); ++iter ) {
+	mChannel	= OpenNI::toChannel16u( frame.getDepthFrame() ); 
+	mUsers		= OpenNI::toVector( frame.getUsers() );
+	for ( vector<nite::UserData>::iterator iter = mUsers.begin(); iter != mUsers.end(); ++iter ) {
 		if ( iter->isNew() ) {
 			mDevice->getUserTracker().startSkeletonTracking( iter->getId() );
 		} else if ( iter->isLost() ) {
@@ -177,11 +196,10 @@ void UserApp::setup()
 	}
 
 	mDevice->getUserTracker().setSkeletonSmoothingFactor( 0.5f );
-
 	mDevice->connectUserEventHandler( &UserApp::onUser, this );
 	mDevice->start();
 }
-
+		
 void UserApp::update()
 {
 	mDeviceManager->update();

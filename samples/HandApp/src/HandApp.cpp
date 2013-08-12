@@ -1,6 +1,10 @@
 /*
 * 
-* Copyright (c) 2013, Ban the Rewind
+* Copyright (c) 2013, Wieden+Kennedy
+* 
+* Stephen Schieberl
+* Michael Latzoni
+*
 * All rights reserved.
 * 
 * Redistribution and use in source and binary forms, with or 
@@ -37,38 +41,29 @@
 #include "cinder/app/AppBasic.h"
 #include "cinder/Camera.h"
 #include "Cinder-OpenNI.h"
-#include "Emitter.h"
-#include "Particle.h"
 
 /* 
 * This application demonstrates how to display NiTE hands.
 */
 class HandApp : public ci::app::AppBasic 
 {
-
 public:
-	void						update();
 	void						draw();
 	void						keyDown( ci::app::KeyEvent event );
 	void						prepareSettings( ci::app::AppBasic::Settings* settings );
 	void						setup();
+	void						update();
 private:
-	OpenNI::DeviceManagerRef	mDeviceManager;
-	OpenNI::DeviceRef			mDevice;
+	ci::CameraPersp				mCamera;
+
 	ci::Channel16u				mChannel;
-	void						onHand( nite::HandTrackerFrameRef frame, OpenNI::DeviceOptions deviceOptions );
+	OpenNI::DeviceRef			mDevice;
+	OpenNI::DeviceManagerRef	mDeviceManager;
+	std::vector<ci::Vec3f>		mHands;
+	ci::gl::TextureRef			mTexture;
+	void						onHand( nite::HandTrackerFrameRef frame, const OpenNI::DeviceOptions& deviceOptions );
 
 	void						screenShot();
-
-	//std::vector< nite::HandData >		mTrackedHands;
-	std::map< nite::HandId, EmitterRef >	mEmitters;
-	std::vector< ParticleRef >				mParticles;
-
-	ci::CameraPersp				mCamera;
-	uint32_t					mParticlesPerFrame;
-	double						mPrevSeconds;
-
-	static const uint32_t		kMaxParticles;
 };
 
 #include "cinder/gl/Texture.h"
@@ -78,81 +73,31 @@ private:
 using namespace ci;
 using namespace ci::app;
 using namespace std;
-using namespace OpenNI;
-
-const uint32_t HandApp::kMaxParticles		= 500;
-
-void HandApp::update()
-{
-	mDeviceManager->update();
-}
 
 void HandApp::draw()
 {
-	double currentSeconds	= getElapsedSeconds();
-	double elapsedSeconds	= currentSeconds - mPrevSeconds;
-	mPrevSeconds			= currentSeconds;
-
 	gl::setViewport( getWindowBounds() );
-	gl::clear( Colorf::black() );
-
-	// draw depth stream in 2d
+	gl::clear();
 	gl::setMatricesWindow( getWindowSize() );
-
-	if ( mChannel )
-	{
-		gl::color( Colorf::white() );
-		gl::TextureRef tex = gl::Texture::create( Channel8u( mChannel ) );
-		gl::draw( tex, tex->getBounds(), getWindowBounds() );
+	
+	if ( mChannel ) {
+		if ( mTexture ) {
+			mTexture->update( Surface32f( mChannel ) );
+		} else {
+			mTexture = gl::Texture::create( mChannel );
+		}
+		gl::draw( mTexture, mTexture->getBounds(), getWindowBounds() );
 	}
 
-	// draw 3d content
 	gl::setMatrices( mCamera );
-	gl::enableWireframe();
-
-	// draw emitters
-	for ( const auto& emitterPair : mEmitters )
-	{
-		( emitterPair.first % 2 ) ? gl::color( 1.0f, 0.0f, 0.0f ) : gl::color( 0.0f, 0.0f, 1.0f );
-		gl::drawSphere( emitterPair.second->getPosition(), 25.0f );
-
-		if ( mParticles.size() <= kMaxParticles )
-		{
-			for ( uint32_t i = 0; i < mParticlesPerFrame; ++i )
-			{
-				mParticles.push_back( Particle::create( emitterPair.second->getPosition() ) );
-			}
+	for ( vector<Vec3f>::const_iterator iter = mHands.begin(); iter != mHands.end(); ++iter ) {
+		gl::pushMatrices();
+		gl::translate( *iter );
+		for ( float i = 0.0f; i < 50.0f; i += 5.0f ) {
+			gl::drawStrokedCircle( Vec2f::zero(), 10.0f + i, 32 );
 		}
+		gl::popMatrices();
 	}
-
-	gl::disableWireframe();
-
-	for ( auto iter = mParticles.begin(); iter != mParticles.end(); )
-	{
-		(*iter)->update( elapsedSeconds );
-
-		if ( !(*iter)->isDead() )
-		{
-			gl::color( (*iter)->getColor() );
-			gl::drawSphere( (*iter)->getPosition(), 5.0f );
-			++iter;
-		}
-		else
-		{
-			iter = mParticles.erase( iter );
-		}
-	}
-
-	/*for ( const auto& particle : mParticles )
-	{
-		particle->update( elapsedSeconds );
-
-		if ( !particle->isDead() )
-		{
-			gl::color( particle->getColor() );
-			gl::drawSphere( particle->getPosition(), 5.0f );
-		}
-	}*/
 }
 
 void HandApp::keyDown( KeyEvent event )
@@ -170,65 +115,34 @@ void HandApp::keyDown( KeyEvent event )
 	}
 }
 
-void HandApp::onHand( nite::HandTrackerFrameRef frame, DeviceOptions deviceOptions )
+void HandApp::onHand( nite::HandTrackerFrameRef frame, const OpenNI::DeviceOptions& deviceOptions )
 {
-	openni::VideoFrameRef depthFrame	= frame.getDepthFrame();
-	mChannel							= toChannel16u( depthFrame );
+	mChannel							= OpenNI::toChannel16u( frame.getDepthFrame() );
+	vector<nite::GestureData> gestures	= OpenNI::toVector( frame.getGestures() );
+	vector<nite::HandData> hands		= OpenNI::toVector( frame.getHands() );
 
-	std::vector< nite::GestureData >	gestures		= toVector( frame.getGestures() );
-
-	for ( auto iter = gestures.begin(); iter != gestures.end(); ++iter )
-	{
-		if ( iter->isComplete() )
-		{
-			console() << "Gesture Completed: ";
-
-			if ( iter->getType() == nite::GestureType::GESTURE_WAVE )
-			{
-				console() << "WAVE" << endl;
-
-				nite::HandId id;
-				mDevice->getHandTracker().startHandTracking( iter->getCurrentPosition(), &id );
-			}
-			else if ( iter->getType() == nite::GestureType::GESTURE_CLICK )
-			{
-				console() << "CLICK" << endl;
-			}
-			else if ( iter->getType() == nite::GestureType::GESTURE_HAND_RAISE )
-			{
-				console() << "HAND RAISE" << endl;
-			}
+	// Use a wave gesture to trigger hand tracking
+	for ( vector<nite::GestureData>::const_iterator iter = gestures.begin(); iter != gestures.end(); ++iter ) {
+		if ( iter->isComplete() && iter->getType() == nite::GestureType::GESTURE_WAVE ) {
+			nite::HandId id;
+			mDevice->getHandTracker().startHandTracking( iter->getCurrentPosition(), &id );
 		}
 	}
 
-	auto hands	= toVector( frame.getHands() );
-
-	for ( const auto& hand : hands )
-	{
-		if ( hand.isTracking() && !hand.isLost() )
-		{
-			Vec3f position		= toVec3f( hand.getPosition() );
-			position.x			= -position.x;
-
-			if ( hand.isNew() )
-			{
-				mEmitters.insert( std::make_pair( hand.getId(), Emitter::create( position ) ) );
-			}
-			else
-			{
-				mEmitters.at( hand.getId() )->update( position );
-			}
-		}
-		else
-		{
-			mEmitters.erase( hand.getId() );
+	mHands.clear();
+	for ( vector<nite::HandData>::const_iterator iter = hands.begin(); iter != hands.end(); ++iter ) {
+		if ( iter->isLost() ) {
+			mDevice->getHandTracker().stopHandTracking( iter->getId() );
+		} else if ( iter->isTracking() ) {
+			Vec3f position	= OpenNI::toVec3f( iter->getPosition() );
+			position.x		= -position.x;
+			mHands.push_back( position );
 		}
 	}
 }
 
 void HandApp::prepareSettings( Settings* settings )
 {
-	//settings->enableConsoleWindow();
 	settings->setFrameRate( 60.0f );
 	settings->setWindowSize( 800, 600 );
 }
@@ -240,29 +154,37 @@ void HandApp::screenShot()
 
 void HandApp::setup()
 {
-	mParticlesPerFrame		= 5;
-	mPrevSeconds			= getElapsedSeconds();
-	mDeviceManager			= DeviceManager::create();
+	gl::color( ColorAf::white() );
 
-	Vec2i windowSize = toPixels( getWindowSize() );
-	mCamera = CameraPersp( windowSize.x, windowSize.y, 45.0f, 0.1f, 10000.0f );
+	mDeviceManager		= OpenNI::DeviceManager::create();
+
+	Vec2i windowSize	= toPixels( getWindowSize() );
+	mCamera				= CameraPersp( windowSize.x, windowSize.y, 45.0f, 1.0f, 1000.0f );
 	mCamera.lookAt( Vec3f::zero(), Vec3f::zAxis(), Vec3f::yAxis() );
 
 	try {
-		mDevice = mDeviceManager->createDevice( OpenNI::DeviceOptions().enableHandTracking() );
-	} catch ( ExcDeviceNotFound ex ) {
+		mDevice = mDeviceManager->createDevice( OpenNI::DeviceOptions().enableHandTracking().enableInfrared() );
+	} catch ( OpenNI::ExcDeviceNotFound ex ) {
 		console() << ex.what() << endl;
 		quit();
-	} catch ( ExcDeviceNotAvailable ex ) {
+		return;
+	} catch ( OpenNI::ExcDeviceNotAvailable ex ) {
 		console() << ex.what() << endl;
 		quit();
 		return;
 	}
 	
+	// NiTE has a strange behavior where hand tracking 
+	// needs to be triggered by a gesture. In this case, we're going 
+	// to look for a hand wave.
 	mDevice->connectHandEventHandler( &HandApp::onHand, this );
 	mDevice->start();
-	//mDevice->getHandTracker().startGestureDetection( nite::GestureType::GESTURE_CLICK );
 	mDevice->getHandTracker().startGestureDetection( nite::GestureType::GESTURE_WAVE );
+}
+
+void HandApp::update()
+{
+	mDeviceManager->update();
 }
 
 CINDER_APP_BASIC( HandApp, RendererGl )

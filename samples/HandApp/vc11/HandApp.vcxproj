@@ -133,9 +133,7 @@ xcopy "$(NITE2_REDIST)NiTE2\Data\*" "$(ProjectDir)bin\NiTE2\Data\" /Y /C
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\Cinder-OpenNI.cpp" />
-    <ClCompile Include="..\src\Emitter.cpp" />
     <ClCompile Include="..\src\HandApp.cpp" />
-    <ClCompile Include="..\src\Particle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\resources\cinder_app_icon.ico" />
@@ -145,8 +143,6 @@ xcopy "$(NITE2_REDIST)NiTE2\Data\*" "$(ProjectDir)bin\NiTE2\Data\" /Y /C
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\Cinder-OpenNI.h" />
-    <ClInclude Include="..\src\Emitter.h" />
-    <ClInclude Include="..\src\Particle.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

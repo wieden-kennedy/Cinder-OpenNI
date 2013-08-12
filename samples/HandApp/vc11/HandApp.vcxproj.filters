@@ -16,6 +16,9 @@
     <Filter Include="Blocks\Cinder-OpenNI">
       <UniqueIdentifier>{afd42048-5c74-46d0-86d0-6f3e74f613c6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{bde5e48a-24ce-4fcd-b92d-0c9a21d8fc49}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\HandApp.cpp">
@@ -23,12 +26,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\Cinder-OpenNI.cpp">
       <Filter>Blocks\Cinder-OpenNI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Particle.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Emitter.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -44,12 +41,6 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\src\Cinder-OpenNI.h">
       <Filter>Blocks\Cinder-OpenNI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Particle.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Emitter.h">
-      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

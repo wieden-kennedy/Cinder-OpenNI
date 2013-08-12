@@ -1,6 +1,10 @@
 /*
 * 
-* Copyright (c) 2013, Ban the Rewind
+* Copyright (c) 2013, Wieden+Kennedy
+* 
+* Stephen Schieberl
+* Michael Latzoni
+*
 * All rights reserved.
 * 
 * Redistribution and use in source and binary forms, with or 
@@ -51,10 +55,11 @@ public:
 	void						prepareSettings( ci::app::AppBasic::Settings* settings );
 	void						setup();
 private:
-	OpenNI::DeviceManagerRef	mDeviceManager;
-	OpenNI::DeviceRef			mDevice;
 	ci::Channel16u				mChannel;
-	void						onDepth( openni::VideoFrameRef frame, OpenNI::DeviceOptions deviceOptions );
+	OpenNI::DeviceRef			mDevice;
+	OpenNI::DeviceManagerRef	mDeviceManager;
+	ci::gl::TextureRef			mTexture;
+	void						onDepth( openni::VideoFrameRef frame, const OpenNI::DeviceOptions& deviceOptions );
 
 	void						screenShot();
 };
@@ -72,14 +77,13 @@ void BasicApp::draw()
 	gl::clear( Colorf::black() );
 
 	if ( mChannel ) {
-		gl::TextureRef texture = gl::Texture::create( Channel8u( mChannel ) );
-		gl::draw( texture, Vec2f::zero() );
+		if ( mTexture ) {
+			mTexture->update( Channel32f( mChannel ) );
+		} else {
+			mTexture = gl::Texture::create( Channel32f( mChannel ) );
+		}
+		gl::draw( mTexture, mTexture->getBounds(), getWindowBounds() );
 	}
-}
-
-void BasicApp::update()
-{
-	mDeviceManager->update();
 }
 
 void BasicApp::keyDown( KeyEvent event )
@@ -97,7 +101,7 @@ void BasicApp::keyDown( KeyEvent event )
 	}
 }
 
-void BasicApp::onDepth( openni::VideoFrameRef frame, OpenNI::DeviceOptions deviceOptions )
+void BasicApp::onDepth( openni::VideoFrameRef frame, const OpenNI::DeviceOptions& deviceOptions )
 {
 	mChannel = OpenNI::toChannel16u( frame );
 }
@@ -137,6 +141,11 @@ void BasicApp::setup()
 			mDevice->start();
 		}
 	}
+}
+
+void BasicApp::update()
+{
+	mDeviceManager->update();
 }
 
 CINDER_APP_BASIC( BasicApp, RendererGl )

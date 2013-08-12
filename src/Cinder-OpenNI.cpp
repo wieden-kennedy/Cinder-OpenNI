@@ -1,6 +1,10 @@
 /*
 * 
-* Copyright (c) 2013, Ban the Rewind
+* Copyright (c) 2013, Wieden+Kennedy
+* 
+* Stephen Schieberl
+* Michael Latzoni
+*
 * All rights reserved.
 * 
 * Redistribution and use in source and binary forms, with or 

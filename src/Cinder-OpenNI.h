@@ -1,6 +1,10 @@
 /*
 * 
-* Copyright (c) 2013, Ban the Rewind
+* Copyright (c) 2013, Wieden+Kennedy
+* 
+* Stephen Schieberl
+* Michael Latzoni
+*
 * All rights reserved.
 * 
 * Redistribution and use in source and binary forms, with or 
@@ -170,7 +174,7 @@ namespace OpenNI
 	public:
 		void						onNewFrame( nite::HandTracker& tracker );
 	private:
-		typedef std::function<void ( nite::HandTrackerFrameRef, DeviceOptions )> EventHandler;
+		typedef std::function<void ( nite::HandTrackerFrameRef, const DeviceOptions& )> EventHandler;
 		
 		HandTrackerListener( EventHandler eventHandler, DeviceOptions& deviceOptions );
 
@@ -187,7 +191,7 @@ namespace OpenNI
 	public:
 		void						onNewFrame( nite::UserTracker& tracker );
 	private:
-		typedef std::function<void ( nite::UserTrackerFrameRef, DeviceOptions )> EventHandler;
+		typedef std::function<void ( nite::UserTrackerFrameRef, const DeviceOptions& )> EventHandler;
 		
 		UserTrackerListener( EventHandler eventHandler, DeviceOptions& deviceOptions );
 
@@ -204,7 +208,7 @@ namespace OpenNI
 	public:
 		void						onNewFrame( openni::VideoStream& stream );
 	private:
-		typedef std::function<void ( openni::VideoFrameRef, DeviceOptions )> EventHandler;
+		typedef std::function<void ( openni::VideoFrameRef, const DeviceOptions& )> EventHandler;
 		
 		VideoStreamListener( EventHandler eventHandler, DeviceOptions& deviceOptions );
 
