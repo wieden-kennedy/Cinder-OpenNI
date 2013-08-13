@@ -174,9 +174,6 @@ void HandApp::setup()
 		return;
 	}
 	
-	// NiTE has a strange behavior where hand tracking 
-	// needs to be triggered by a gesture. In this case, we're going 
-	// to look for a hand wave.
 	mDevice->connectHandEventHandler( &HandApp::onHand, this );
 	mDevice->start();
 	mDevice->getHandTracker().startGestureDetection( nite::GestureType::GESTURE_WAVE );
