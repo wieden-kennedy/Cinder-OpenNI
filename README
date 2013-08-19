@@ -1,5 +1,5 @@
-THIS IS A WORK IN PROGRESS. Initial development is 
-not complete.  Some parts of this block do not yet function.
+THIS IS A WORK IN PROGRESS. We are still adding
+support for VC10 and Xcode before we call it good.
 
 This block wraps OpenNI for Cinder. 
 
@@ -9,11 +9,10 @@ http://www.openni.org/openni-sdk/
 
 -----------------------------------------
 
-Version 0.0.0
+Version 0.0.1
 
 -----------------------------------------
 
+http://www.wk.com
 http://www.bantherewind.com
 http://www.libcinder.org
-
-bantherewind@gmail.com
