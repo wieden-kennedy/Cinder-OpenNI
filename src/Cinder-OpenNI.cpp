@@ -380,7 +380,7 @@ namespace OpenNI
 	//////////////////////////////////////////////////////////////////////////////////////////////
 
 	Device::Device( const DeviceOptions& deviceOptions )
-		: mConnected( true ), mDeviceOptions( deviceOptions ), mDeviceState( openni::DeviceState::DEVICE_STATE_NOT_READY ), 
+		: mConnected( false ), mDeviceOptions( deviceOptions ), mDeviceState( openni::DeviceState::DEVICE_STATE_NOT_READY ), 
 		mListenerColor( 0 ), mListenerDepth( 0 ), mListenerHand( 0 ), mListenerInfrared( 0 ), mListenerUser( 0 )
 	{
 		if ( success( mDevice.open( mDeviceOptions.getUri().c_str() ) ) ) {
@@ -430,6 +430,8 @@ namespace OpenNI
 			if ( mDeviceOptions.isUserTrackingEnabled() ) {
 				success( mTrackerUser.create( &mDevice ) );
 			}
+
+			mConnected = true;
 		}
 	}
 
