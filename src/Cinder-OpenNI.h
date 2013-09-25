@@ -333,10 +333,10 @@ public:
 
 	size_t										getDeviceCount() const;
 	const std::vector<openni::DeviceInfo>&		getDeviceInfoList() const;
+protected:
+	DeviceManager();
 
 	void										update();
-private:
-	DeviceManager();
 
 	void										enumerateDevices();
 	DeviceRef									getDevice( const std::string& uri );

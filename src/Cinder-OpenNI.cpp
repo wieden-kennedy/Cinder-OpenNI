@@ -652,6 +652,8 @@ DeviceManager::DeviceManager()
 	: mDeviceCount( 0 ), mInitialized( false )
 {
 	initialize();
+
+	app::App::get()->getSignalUpdate().connect( bind( &DeviceManager::update, this ) );
 }
 
 DeviceManager::~DeviceManager()

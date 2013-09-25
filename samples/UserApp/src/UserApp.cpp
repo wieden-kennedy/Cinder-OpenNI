@@ -55,7 +55,6 @@ public:
 	void						keyDown( ci::app::KeyEvent event );
 	void						prepareSettings( ci::app::AppBasic::Settings* settings );
 	void						setup();
-	void						update();
 private:
 	struct Bone
 	{
@@ -198,11 +197,6 @@ void UserApp::setup()
 	mDevice->getUserTracker().setSkeletonSmoothingFactor( 0.5f );
 	mDevice->connectUserEventHandler( &UserApp::onUser, this );
 	mDevice->start();
-}
-		
-void UserApp::update()
-{
-	mDeviceManager->update();
 }
 
 CINDER_APP_BASIC( UserApp, RendererGl )

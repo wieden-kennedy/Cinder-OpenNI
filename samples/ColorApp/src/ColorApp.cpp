@@ -50,7 +50,6 @@ class ColorApp : public ci::app::AppBasic
 {
 public:
 	void						draw();
-	void						update();
 	void						keyDown( ci::app::KeyEvent event );
 	void						prepareSettings( ci::app::AppBasic::Settings* settings );
 	void						setup();
@@ -150,11 +149,6 @@ void ColorApp::setup()
 			mDevice->start();
 		}
 	}
-}
-
-void ColorApp::update()
-{
-	mDeviceManager->update();
 }
 
 CINDER_APP_BASIC( ColorApp, RendererGl )

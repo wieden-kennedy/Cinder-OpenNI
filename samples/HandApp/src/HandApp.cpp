@@ -52,7 +52,6 @@ public:
 	void						keyDown( ci::app::KeyEvent event );
 	void						prepareSettings( ci::app::AppBasic::Settings* settings );
 	void						setup();
-	void						update();
 private:
 	ci::CameraPersp				mCamera;
 
@@ -177,11 +176,6 @@ void HandApp::setup()
 	mDevice->connectHandEventHandler( &HandApp::onHand, this );
 	mDevice->start();
 	mDevice->getHandTracker().startGestureDetection( nite::GestureType::GESTURE_WAVE );
-}
-
-void HandApp::update()
-{
-	mDeviceManager->update();
 }
 
 CINDER_APP_BASIC( HandApp, RendererGl )

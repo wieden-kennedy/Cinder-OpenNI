@@ -50,7 +50,6 @@ class BasicApp : public ci::app::AppBasic
 {
 public:
 	void						draw();
-	void						update();
 	void						keyDown( ci::app::KeyEvent event );
 	void						prepareSettings( ci::app::AppBasic::Settings* settings );
 	void						setup();
@@ -143,11 +142,6 @@ void BasicApp::setup()
 			mDevice->start();
 		}
 	}
-}
-
-void BasicApp::update()
-{
-	mDeviceManager->update();
 }
 
 CINDER_APP_BASIC( BasicApp, RendererGl )
