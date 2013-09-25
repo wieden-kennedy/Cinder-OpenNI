@@ -1,6 +1,3 @@
-THIS IS A WORK IN PROGRESS. We are still adding
-support for VC10 and Xcode before we call it good.
-
 This block wraps OpenNI for Cinder. 
 
 This requires the PrimeSense driver, the OpenNI SDK, 
@@ -9,11 +6,10 @@ http://www.openni.org/openni-sdk/
 
 -----------------------------------------
 
-Version 0.0.1
+Version 0.0.2
 
-TO DO
-
-* Debug and develop device connect and disconnect implementation
+Working on Xcode support. Basic app builds, 
+but does not work with Kinect so we can't test atm.
 
 -----------------------------------------
 

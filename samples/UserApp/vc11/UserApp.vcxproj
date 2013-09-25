@@ -51,7 +51,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\..\..\src;..\..\..\..\..\include;..\..\..\..\..\boost;$(OPENNI2_INCLUDE);$(NITE2_INCLUDE);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\src;..\..\..\..\..\include;..\..\..\..\..\boost;..\..\..\src\OpenNI;..\..\..\src\NiTE;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -63,7 +63,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>cinder_d.lib;OpenNI2.lib;Nite2.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\..\..\..\lib;..\..\..\..\..\lib\msw;$(OPENNI2_LIB);$(NITE2_LIB);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\..\..\lib;..\..\..\..\..\lib\msw;..\..\..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
@@ -73,25 +73,23 @@
       <IgnoreSpecificDefaultLibraries>LIBCMT</IgnoreSpecificDefaultLibraries>
     </Link>
     <ResourceCompile>
-      <AdditionalIncludeDirectories>../../../../../include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\..\..\include</AdditionalIncludeDirectories>
     </ResourceCompile>
     <PreBuildEvent>
-      <Command>xcopy "$(OPENNI2_REDIST)OpenNI2.dll" "$(ProjectDir)bin\" /Y /C
+      <Command>xcopy "..\..\..\lib\OpenNI2.dll" "$(ProjectDir)bin\" /Y /C
 
-xcopy "$(NITE2_REDIST)NiTE2.dll" "$(ProjectDir)bin\" /Y /C
+xcopy "..\..\..\lib\NiTE2.dll" "$(ProjectDir)bin\" /Y /C
 
-xcopy "$(OPENNI2_REDIST)OpenNI2\Drivers\*.dll" "$(ProjectDir)bin\OpenNI2\Drivers\" /Y /C
+xcopy "..\..\..\lib\OpenNI2\Drivers\*.dll" "$(ProjectDir)bin\OpenNI2\Drivers\" /Y /C
 
-xcopy "$(NITE2_REDIST)NiTE2\*" "$(ProjectDir)bin\NiTE2\" /Y /C
+xcopy "..\..\..\lib\NiTE2\*" "$(ProjectDir)bin\NiTE2\" /Y /C
 
-xcopy "$(NITE2_REDIST)NiTE2\Data\*" "$(ProjectDir)bin\NiTE2\Data\" /Y /C
-
-</Command>
+xcopy "..\..\..\lib\NiTE2\Data\*" "$(ProjectDir)bin\NiTE2\Data\" /Y /C</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\..\src;..\..\..\..\..\include;..\..\..\..\..\boost;$(OPENNI2_INCLUDE);$(NITE2_INCLUDE);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\src;..\..\..\..\..\include;..\..\..\..\..\boost;..\..\..\src\OpenNI;..\..\..\src\NiTE;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <PrecompiledHeader>
@@ -104,7 +102,7 @@ xcopy "$(NITE2_REDIST)NiTE2\Data\*" "$(ProjectDir)bin\NiTE2\Data\" /Y /C
     </ProjectReference>
     <Link>
       <AdditionalDependencies>cinder.lib;OpenNI2.lib;Nite2.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\..\..\..\lib;..\..\..\..\..\lib\msw;$(OPENNI2_LIB);$(NITE2_LIB);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\..\..\lib;..\..\..\..\..\lib\msw;..\..\..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <GenerateMapFile>true</GenerateMapFile>
       <SubSystem>Windows</SubSystem>
@@ -117,18 +115,19 @@ xcopy "$(NITE2_REDIST)NiTE2\Data\*" "$(ProjectDir)bin\NiTE2\Data\" /Y /C
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
     <PreBuildEvent>
-      <Command>xcopy "$(OPENNI2_REDIST)OpenNI2.dll" "$(ProjectDir)bin\" /Y /C
+      <Command>xcopy "..\..\..\lib\OpenNI2.dll" "$(ProjectDir)bin\" /Y /C
 
-xcopy "$(NITE2_REDIST)NiTE2.dll" "$(ProjectDir)bin\" /Y /C
+xcopy "..\..\..\lib\NiTE2.dll" "$(ProjectDir)bin\" /Y /C
 
-xcopy "$(OPENNI2_REDIST)OpenNI2\Drivers\*.dll" "$(ProjectDir)bin\OpenNI2\Drivers\" /Y /C
+xcopy "..\..\..\lib\OpenNI2\Drivers\*.dll" "$(ProjectDir)bin\OpenNI2\Drivers\" /Y /C
 
-xcopy "$(NITE2_REDIST)NiTE2\*" "$(ProjectDir)bin\NiTE2\" /Y /C
+xcopy "..\..\..\lib\NiTE2\*" "$(ProjectDir)bin\NiTE2\" /Y /C
 
-xcopy "$(NITE2_REDIST)NiTE2\Data\*" "$(ProjectDir)bin\NiTE2\Data\" /Y /C
-
-</Command>
+xcopy "..\..\..\lib\NiTE2\Data\*" "$(ProjectDir)bin\NiTE2\Data\" /Y /C</Command>
     </PreBuildEvent>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>..\..\..\..\..\include</AdditionalIncludeDirectories>
+    </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\Cinder-OpenNI.cpp" />
