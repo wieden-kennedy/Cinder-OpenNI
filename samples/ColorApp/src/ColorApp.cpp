@@ -130,11 +130,17 @@ void ColorApp::setup()
 		// from crashing when no devices are connected.
 		try {
 			// Because OpenNI works with several devices which do not have RGB cameras, 
-			// the color color stream is disabled by default. Enable color in DeviceOptions
+			// the color stream is disabled by default. Enable color in DeviceOptions
 			// to turn it on.
 			mDevice = mDeviceManager->createDevice( OpenNI::DeviceOptions().enableColor() );
+		} catch ( OpenNI::ExcDeviceNotFound ex ) {
+			console() << ex.what() << endl;
+			quit();
+			return;
 		} catch ( OpenNI::ExcDeviceNotAvailable ex ) {
 			console() << ex.what() << endl;
+			quit();
+			return;
 		}
 	
 		// If we've successfully accessed a device, start and add a 

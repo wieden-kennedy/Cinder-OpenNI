@@ -132,6 +132,8 @@ void BasicApp::setup()
 			mDevice = mDeviceManager->createDevice();
 		} catch ( OpenNI::ExcDeviceNotAvailable ex ) {
 			console() << ex.what() << endl;
+			quit();
+			return;
 		}
 	
 		// If we've successfully accessed a device, start and add a 
