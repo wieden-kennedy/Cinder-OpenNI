@@ -7,6 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AEAFFA2517F37D6C0033EE32 /* libNiTE2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = AEAFFA1D17F37D6C0033EE32 /* libNiTE2.dylib */; };
+		AEAFFA2617F37D6C0033EE32 /* libOpenNI2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = AEAFFA1E17F37D6C0033EE32 /* libOpenNI2.dylib */; };
+		AEAFFA2717F37D6C0033EE32 /* NiTE.ini in Resources */ = {isa = PBXBuildFile; fileRef = AEAFFA1F17F37D6C0033EE32 /* NiTE.ini */; };
+		AEAFFA2817F37D6C0033EE32 /* NiTE2 in Resources */ = {isa = PBXBuildFile; fileRef = AEAFFA2017F37D6C0033EE32 /* NiTE2 */; };
+		AEAFFA2A17F37D6C0033EE32 /* OpenNI.ini in Resources */ = {isa = PBXBuildFile; fileRef = AEAFFA2217F37D6C0033EE32 /* OpenNI.ini */; };
+		AEAFFA2B17F37D6C0033EE32 /* OpenNI2 in Resources */ = {isa = PBXBuildFile; fileRef = AEAFFA2317F37D6C0033EE32 /* OpenNI2 */; };
+		AEAFFA2D17F37DB00033EE32 /* libNiTE2.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = AEAFFA1D17F37D6C0033EE32 /* libNiTE2.dylib */; };
+		AEAFFA2E17F37DB00033EE32 /* libOpenNI2.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = AEAFFA1E17F37D6C0033EE32 /* libOpenNI2.dylib */; };
+		AEAFFA2F17F37DB00033EE32 /* NiTE.ini in CopyFiles */ = {isa = PBXBuildFile; fileRef = AEAFFA1F17F37D6C0033EE32 /* NiTE.ini */; };
+		AEAFFA3017F37DB00033EE32 /* NiTE2 in CopyFiles */ = {isa = PBXBuildFile; fileRef = AEAFFA2017F37D6C0033EE32 /* NiTE2 */; };
+		AEAFFA3117F37DB00033EE32 /* OpenNI.ini in CopyFiles */ = {isa = PBXBuildFile; fileRef = AEAFFA2217F37D6C0033EE32 /* OpenNI.ini */; };
+		AEAFFA3217F37DB00033EE32 /* OpenNI2 in CopyFiles */ = {isa = PBXBuildFile; fileRef = AEAFFA2317F37D6C0033EE32 /* OpenNI2 */; };
 		AEBB7F0817BAEAFA00A2CC19 /* CinderApp.icns in Resources */ = {isa = PBXBuildFile; fileRef = 4B9EA6670FB94B019CB80224 /* CinderApp.icns */; };
 		AEBB7F1617BAEAFA00A2CC19 /* BasicApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AEBB7EB617BAC47F00A2CC19 /* BasicApp.cpp */; };
 		AEBB7F1717BAEAFA00A2CC19 /* Cinder-OpenNI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AEBB7EBA17BAC4DD00A2CC19 /* Cinder-OpenNI.cpp */; };
@@ -18,18 +30,6 @@
 		AEBB7F1E17BAEAFA00A2CC19 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784B00FF439BC000DE1D7 /* AudioToolbox.framework */; };
 		AEBB7F1F17BAEAFA00A2CC19 /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784B10FF439BC000DE1D7 /* AudioUnit.framework */; };
 		AEBB7F2017BAEAFA00A2CC19 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784B20FF439BC000DE1D7 /* CoreAudio.framework */; };
-		AEEF154C17F3778900AE2FDD /* libNiTE2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = AEEF154A17F3778900AE2FDD /* libNiTE2.dylib */; };
-		AEEF154D17F3778900AE2FDD /* libOpenNI2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = AEEF154B17F3778900AE2FDD /* libOpenNI2.dylib */; };
-		AEEF155017F377A600AE2FDD /* NiTE2 in Resources */ = {isa = PBXBuildFile; fileRef = AEEF154E17F377A600AE2FDD /* NiTE2 */; };
-		AEEF155117F377A600AE2FDD /* OpenNI2 in Resources */ = {isa = PBXBuildFile; fileRef = AEEF154F17F377A600AE2FDD /* OpenNI2 */; };
-		AEEF155417F377B000AE2FDD /* NiTE.ini in Resources */ = {isa = PBXBuildFile; fileRef = AEEF155217F377B000AE2FDD /* NiTE.ini */; };
-		AEEF155517F377B000AE2FDD /* OpenNI.ini in Resources */ = {isa = PBXBuildFile; fileRef = AEEF155317F377B000AE2FDD /* OpenNI.ini */; };
-		AEEF155617F377F400AE2FDD /* libNiTE2.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = AEEF154A17F3778900AE2FDD /* libNiTE2.dylib */; };
-		AEEF155717F377F400AE2FDD /* libOpenNI2.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = AEEF154B17F3778900AE2FDD /* libOpenNI2.dylib */; };
-		AEEF155817F377F400AE2FDD /* NiTE2 in CopyFiles */ = {isa = PBXBuildFile; fileRef = AEEF154E17F377A600AE2FDD /* NiTE2 */; };
-		AEEF155917F377F400AE2FDD /* NiTE.ini in CopyFiles */ = {isa = PBXBuildFile; fileRef = AEEF155217F377B000AE2FDD /* NiTE.ini */; };
-		AEEF155A17F377F400AE2FDD /* OpenNI2 in CopyFiles */ = {isa = PBXBuildFile; fileRef = AEEF154F17F377A600AE2FDD /* OpenNI2 */; };
-		AEEF155B17F377F400AE2FDD /* OpenNI.ini in CopyFiles */ = {isa = PBXBuildFile; fileRef = AEEF155317F377B000AE2FDD /* OpenNI.ini */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -39,12 +39,12 @@
 			dstPath = "";
 			dstSubfolderSpec = 6;
 			files = (
-				AEEF155617F377F400AE2FDD /* libNiTE2.dylib in CopyFiles */,
-				AEEF155717F377F400AE2FDD /* libOpenNI2.dylib in CopyFiles */,
-				AEEF155817F377F400AE2FDD /* NiTE2 in CopyFiles */,
-				AEEF155917F377F400AE2FDD /* NiTE.ini in CopyFiles */,
-				AEEF155A17F377F400AE2FDD /* OpenNI2 in CopyFiles */,
-				AEEF155B17F377F400AE2FDD /* OpenNI.ini in CopyFiles */,
+				AEAFFA2D17F37DB00033EE32 /* libNiTE2.dylib in CopyFiles */,
+				AEAFFA2E17F37DB00033EE32 /* libOpenNI2.dylib in CopyFiles */,
+				AEAFFA2F17F37DB00033EE32 /* NiTE.ini in CopyFiles */,
+				AEAFFA3017F37DB00033EE32 /* NiTE2 in CopyFiles */,
+				AEAFFA3117F37DB00033EE32 /* OpenNI.ini in CopyFiles */,
+				AEAFFA3217F37DB00033EE32 /* OpenNI2 in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -62,17 +62,17 @@
 		4B9EA6670FB94B019CB80224 /* CinderApp.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = CinderApp.icns; path = ../resources/CinderApp.icns; sourceTree = "<group>"; };
 		5323E6B10EAFCA74003A9687 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = /System/Library/Frameworks/CoreVideo.framework; sourceTree = "<absolute>"; };
 		5323E6B50EAFCA7E003A9687 /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = /System/Library/Frameworks/QTKit.framework; sourceTree = "<absolute>"; };
+		AEAFFA1D17F37D6C0033EE32 /* libNiTE2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libNiTE2.dylib; path = ../../../lib/libNiTE2.dylib; sourceTree = "<group>"; };
+		AEAFFA1E17F37D6C0033EE32 /* libOpenNI2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libOpenNI2.dylib; path = ../../../lib/libOpenNI2.dylib; sourceTree = "<group>"; };
+		AEAFFA1F17F37D6C0033EE32 /* NiTE.ini */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = NiTE.ini; path = ../../../lib/NiTE.ini; sourceTree = "<group>"; };
+		AEAFFA2017F37D6C0033EE32 /* NiTE2 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = NiTE2; path = ../../../lib/NiTE2; sourceTree = "<group>"; };
+		AEAFFA2217F37D6C0033EE32 /* OpenNI.ini */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = OpenNI.ini; path = ../../../lib/OpenNI.ini; sourceTree = "<group>"; };
+		AEAFFA2317F37D6C0033EE32 /* OpenNI2 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = OpenNI2; path = ../../../lib/OpenNI2; sourceTree = "<group>"; };
 		AEBB7EB617BAC47F00A2CC19 /* BasicApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BasicApp.cpp; path = ../src/BasicApp.cpp; sourceTree = "<group>"; };
 		AEBB7EBA17BAC4DD00A2CC19 /* Cinder-OpenNI.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "Cinder-OpenNI.cpp"; path = "../../../src/Cinder-OpenNI.cpp"; sourceTree = "<group>"; };
 		AEBB7EBB17BAC4DD00A2CC19 /* Cinder-OpenNI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Cinder-OpenNI.h"; path = "../../../src/Cinder-OpenNI.h"; sourceTree = "<group>"; };
 		AEBB7F3B17BAEAFA00A2CC19 /* BasicApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BasicApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AEBB7F3C17BAEAFA00A2CC19 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = "/Users/stephen.schieberl/Developer/cinder_dev/blocks/Cinder-OpenNI/samples/BasicApp/xcode/Info.plist"; sourceTree = "<absolute>"; };
-		AEEF154A17F3778900AE2FDD /* libNiTE2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libNiTE2.dylib; path = ../../../lib/macosx/libNiTE2.dylib; sourceTree = "<group>"; };
-		AEEF154B17F3778900AE2FDD /* libOpenNI2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libOpenNI2.dylib; path = ../../../lib/macosx/libOpenNI2.dylib; sourceTree = "<group>"; };
-		AEEF154E17F377A600AE2FDD /* NiTE2 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = NiTE2; path = ../../../lib/macosx/NiTE2; sourceTree = "<group>"; };
-		AEEF154F17F377A600AE2FDD /* OpenNI2 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = OpenNI2; path = ../../../lib/macosx/OpenNI2; sourceTree = "<group>"; };
-		AEEF155217F377B000AE2FDD /* NiTE.ini */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = NiTE.ini; path = ../../../lib/macosx/NiTE.ini; sourceTree = "<group>"; };
-		AEEF155317F377B000AE2FDD /* OpenNI.ini */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = OpenNI.ini; path = ../../../lib/macosx/OpenNI.ini; sourceTree = "<group>"; };
 		E3FE71DEC3104A3AB8011460 /* BasicApp_Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BasicApp_Prefix.pch; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -83,9 +83,9 @@
 			files = (
 				AEBB7F1917BAEAFA00A2CC19 /* Cocoa.framework in Frameworks */,
 				AEBB7F1A17BAEAFA00A2CC19 /* OpenGL.framework in Frameworks */,
-				AEEF154C17F3778900AE2FDD /* libNiTE2.dylib in Frameworks */,
+				AEAFFA2517F37D6C0033EE32 /* libNiTE2.dylib in Frameworks */,
 				AEBB7F1B17BAEAFA00A2CC19 /* CoreVideo.framework in Frameworks */,
-				AEEF154D17F3778900AE2FDD /* libOpenNI2.dylib in Frameworks */,
+				AEAFFA2617F37D6C0033EE32 /* libOpenNI2.dylib in Frameworks */,
 				AEBB7F1C17BAEAFA00A2CC19 /* QTKit.framework in Frameworks */,
 				AEBB7F1D17BAEAFA00A2CC19 /* Accelerate.framework in Frameworks */,
 				AEBB7F1E17BAEAFA00A2CC19 /* AudioToolbox.framework in Frameworks */,
@@ -161,14 +161,14 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				AEAFFA1D17F37D6C0033EE32 /* libNiTE2.dylib */,
+				AEAFFA1E17F37D6C0033EE32 /* libOpenNI2.dylib */,
+				AEAFFA1F17F37D6C0033EE32 /* NiTE.ini */,
+				AEAFFA2017F37D6C0033EE32 /* NiTE2 */,
+				AEAFFA2217F37D6C0033EE32 /* OpenNI.ini */,
+				AEAFFA2317F37D6C0033EE32 /* OpenNI2 */,
 				4B9EA6670FB94B019CB80224 /* CinderApp.icns */,
 				AEBB7F3C17BAEAFA00A2CC19 /* Info.plist */,
-				AEEF154A17F3778900AE2FDD /* libNiTE2.dylib */,
-				AEEF154B17F3778900AE2FDD /* libOpenNI2.dylib */,
-				AEEF154E17F377A600AE2FDD /* NiTE2 */,
-				AEEF155217F377B000AE2FDD /* NiTE.ini */,
-				AEEF154F17F377A600AE2FDD /* OpenNI2 */,
-				AEEF155317F377B000AE2FDD /* OpenNI.ini */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -253,11 +253,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AEEF155117F377A600AE2FDD /* OpenNI2 in Resources */,
+				AEAFFA2B17F37D6C0033EE32 /* OpenNI2 in Resources */,
+				AEAFFA2817F37D6C0033EE32 /* NiTE2 in Resources */,
+				AEAFFA2717F37D6C0033EE32 /* NiTE.ini in Resources */,
 				AEBB7F0817BAEAFA00A2CC19 /* CinderApp.icns in Resources */,
-				AEEF155417F377B000AE2FDD /* NiTE.ini in Resources */,
-				AEEF155017F377A600AE2FDD /* NiTE2 in Resources */,
-				AEEF155517F377B000AE2FDD /* OpenNI.ini in Resources */,
+				AEAFFA2A17F37D6C0033EE32 /* OpenNI.ini in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -293,13 +293,13 @@
 				INSTALL_PATH = "$(HOME)/Applications";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path";
 				LIBRARY_SEARCH_PATHS = (
-					../../../lib/macosx,
-					"/Users/stephen.schieberl/Developer/cinder_dev/blocks/Cinder-OpenNI/lib/macosx",
+					../../../lib,
+					"/Users/stephen.schieberl/Developer/cinder_dev/blocks/Cinder-OpenNI/lib",
 				);
 				OTHER_LDFLAGS = (
 					"\"$(CINDER_PATH)/lib/libcinder_d.a\"",
-					../../../lib/macosx/libNiTE2.dylib,
-					../../../lib/macosx/libOpenNI2.dylib,
+					../../../lib/libNiTE2.dylib,
+					../../../lib/libOpenNI2.dylib,
 				);
 				PRODUCT_NAME = BasicApp;
 				SYMROOT = ./build;
@@ -325,8 +325,8 @@
 				INSTALL_PATH = "$(HOME)/Applications";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path";
 				LIBRARY_SEARCH_PATHS = (
-					../../../lib/macosx,
-					"/Users/stephen.schieberl/Developer/cinder_dev/blocks/Cinder-OpenNI/lib/macosx",
+					../../../lib,
+					"/Users/stephen.schieberl/Developer/cinder_dev/blocks/Cinder-OpenNI/lib",
 				);
 				OTHER_LDFLAGS = (
 					"\"$(CINDER_PATH)/lib/libcinder.a\"",
@@ -352,7 +352,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/boost\"";
 				LD_RUNPATH_SEARCH_PATHS = "";
-				LIBRARY_SEARCH_PATHS = ../../../lib/macosx;
+				LIBRARY_SEARCH_PATHS = ../../../lib;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_LDFLAGS = "";
 				SDKROOT = macosx;
@@ -373,7 +373,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/boost\"";
 				LD_RUNPATH_SEARCH_PATHS = "";
-				LIBRARY_SEARCH_PATHS = ../../../lib/macosx;
+				LIBRARY_SEARCH_PATHS = ../../../lib;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_LDFLAGS = "";
 				SDKROOT = macosx;
