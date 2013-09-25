@@ -1,0 +1,409 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		AEAFFA2517F37D6C0033EE32 /* libNiTE2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = AEAFFA1D17F37D6C0033EE32 /* libNiTE2.dylib */; };
+		AEAFFA2617F37D6C0033EE32 /* libOpenNI2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = AEAFFA1E17F37D6C0033EE32 /* libOpenNI2.dylib */; };
+		AEAFFA2717F37D6C0033EE32 /* NiTE.ini in Resources */ = {isa = PBXBuildFile; fileRef = AEAFFA1F17F37D6C0033EE32 /* NiTE.ini */; };
+		AEAFFA2817F37D6C0033EE32 /* NiTE2 in Resources */ = {isa = PBXBuildFile; fileRef = AEAFFA2017F37D6C0033EE32 /* NiTE2 */; };
+		AEAFFA2A17F37D6C0033EE32 /* OpenNI.ini in Resources */ = {isa = PBXBuildFile; fileRef = AEAFFA2217F37D6C0033EE32 /* OpenNI.ini */; };
+		AEAFFA2B17F37D6C0033EE32 /* OpenNI2 in Resources */ = {isa = PBXBuildFile; fileRef = AEAFFA2317F37D6C0033EE32 /* OpenNI2 */; };
+		AEAFFA2D17F37DB00033EE32 /* libNiTE2.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = AEAFFA1D17F37D6C0033EE32 /* libNiTE2.dylib */; };
+		AEAFFA2E17F37DB00033EE32 /* libOpenNI2.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = AEAFFA1E17F37D6C0033EE32 /* libOpenNI2.dylib */; };
+		AEAFFA2F17F37DB00033EE32 /* NiTE.ini in CopyFiles */ = {isa = PBXBuildFile; fileRef = AEAFFA1F17F37D6C0033EE32 /* NiTE.ini */; };
+		AEAFFA3017F37DB00033EE32 /* NiTE2 in CopyFiles */ = {isa = PBXBuildFile; fileRef = AEAFFA2017F37D6C0033EE32 /* NiTE2 */; };
+		AEAFFA3117F37DB00033EE32 /* OpenNI.ini in CopyFiles */ = {isa = PBXBuildFile; fileRef = AEAFFA2217F37D6C0033EE32 /* OpenNI.ini */; };
+		AEAFFA3217F37DB00033EE32 /* OpenNI2 in CopyFiles */ = {isa = PBXBuildFile; fileRef = AEAFFA2317F37D6C0033EE32 /* OpenNI2 */; };
+		AEBB7F0817BAEAFA00A2CC19 /* CinderApp.icns in Resources */ = {isa = PBXBuildFile; fileRef = 4B9EA6670FB94B019CB80224 /* CinderApp.icns */; };
+		AEBB7F1617BAEAFA00A2CC19 /* BasicApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AEBB7EB617BAC47F00A2CC19 /* BasicApp.cpp */; };
+		AEBB7F1717BAEAFA00A2CC19 /* Cinder-OpenNI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AEBB7EBA17BAC4DD00A2CC19 /* Cinder-OpenNI.cpp */; };
+		AEBB7F1917BAEAFA00A2CC19 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+		AEBB7F1A17BAEAFA00A2CC19 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0091D8F80E81B9330029341E /* OpenGL.framework */; };
+		AEBB7F1B17BAEAFA00A2CC19 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B10EAFCA74003A9687 /* CoreVideo.framework */; };
+		AEBB7F1C17BAEAFA00A2CC19 /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B50EAFCA7E003A9687 /* QTKit.framework */; };
+		AEBB7F1D17BAEAFA00A2CC19 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784AF0FF439BC000DE1D7 /* Accelerate.framework */; };
+		AEBB7F1E17BAEAFA00A2CC19 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784B00FF439BC000DE1D7 /* AudioToolbox.framework */; };
+		AEBB7F1F17BAEAFA00A2CC19 /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784B10FF439BC000DE1D7 /* AudioUnit.framework */; };
+		AEBB7F2017BAEAFA00A2CC19 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784B20FF439BC000DE1D7 /* CoreAudio.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		AED0E7B917E0E61B00852CCA /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 12;
+			dstPath = "";
+			dstSubfolderSpec = 6;
+			files = (
+				AEAFFA2D17F37DB00033EE32 /* libNiTE2.dylib in CopyFiles */,
+				AEAFFA2E17F37DB00033EE32 /* libOpenNI2.dylib in CopyFiles */,
+				AEAFFA2F17F37DB00033EE32 /* NiTE.ini in CopyFiles */,
+				AEAFFA3017F37DB00033EE32 /* NiTE2 in CopyFiles */,
+				AEAFFA3117F37DB00033EE32 /* OpenNI.ini in CopyFiles */,
+				AEAFFA3217F37DB00033EE32 /* OpenNI2 in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		0091D8F80E81B9330029341E /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
+		00B784AF0FF439BC000DE1D7 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
+		00B784B00FF439BC000DE1D7 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		00B784B10FF439BC000DE1D7 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
+		00B784B20FF439BC000DE1D7 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
+		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
+		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		4B9EA6670FB94B019CB80224 /* CinderApp.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = CinderApp.icns; path = ../resources/CinderApp.icns; sourceTree = "<group>"; };
+		5323E6B10EAFCA74003A9687 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = /System/Library/Frameworks/CoreVideo.framework; sourceTree = "<absolute>"; };
+		5323E6B50EAFCA7E003A9687 /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = /System/Library/Frameworks/QTKit.framework; sourceTree = "<absolute>"; };
+		AEAFFA1D17F37D6C0033EE32 /* libNiTE2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libNiTE2.dylib; path = ../../../lib/libNiTE2.dylib; sourceTree = "<group>"; };
+		AEAFFA1E17F37D6C0033EE32 /* libOpenNI2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libOpenNI2.dylib; path = ../../../lib/libOpenNI2.dylib; sourceTree = "<group>"; };
+		AEAFFA1F17F37D6C0033EE32 /* NiTE.ini */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = NiTE.ini; path = ../../../lib/NiTE.ini; sourceTree = "<group>"; };
+		AEAFFA2017F37D6C0033EE32 /* NiTE2 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = NiTE2; path = ../../../lib/NiTE2; sourceTree = "<group>"; };
+		AEAFFA2217F37D6C0033EE32 /* OpenNI.ini */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = OpenNI.ini; path = ../../../lib/OpenNI.ini; sourceTree = "<group>"; };
+		AEAFFA2317F37D6C0033EE32 /* OpenNI2 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = OpenNI2; path = ../../../lib/OpenNI2; sourceTree = "<group>"; };
+		AEBB7EB617BAC47F00A2CC19 /* BasicApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BasicApp.cpp; path = ../src/BasicApp.cpp; sourceTree = "<group>"; };
+		AEBB7EBA17BAC4DD00A2CC19 /* Cinder-OpenNI.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "Cinder-OpenNI.cpp"; path = "../../../src/Cinder-OpenNI.cpp"; sourceTree = "<group>"; };
+		AEBB7EBB17BAC4DD00A2CC19 /* Cinder-OpenNI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Cinder-OpenNI.h"; path = "../../../src/Cinder-OpenNI.h"; sourceTree = "<group>"; };
+		AEBB7F3B17BAEAFA00A2CC19 /* BasicApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BasicApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AEBB7F3C17BAEAFA00A2CC19 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = "/Users/stephen.schieberl/Developer/cinder_dev/blocks/Cinder-OpenNI/samples/BasicApp/xcode/Info.plist"; sourceTree = "<absolute>"; };
+		E3FE71DEC3104A3AB8011460 /* BasicApp_Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BasicApp_Prefix.pch; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		AEBB7F1817BAEAFA00A2CC19 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AEBB7F1917BAEAFA00A2CC19 /* Cocoa.framework in Frameworks */,
+				AEBB7F1A17BAEAFA00A2CC19 /* OpenGL.framework in Frameworks */,
+				AEAFFA2517F37D6C0033EE32 /* libNiTE2.dylib in Frameworks */,
+				AEBB7F1B17BAEAFA00A2CC19 /* CoreVideo.framework in Frameworks */,
+				AEAFFA2617F37D6C0033EE32 /* libOpenNI2.dylib in Frameworks */,
+				AEBB7F1C17BAEAFA00A2CC19 /* QTKit.framework in Frameworks */,
+				AEBB7F1D17BAEAFA00A2CC19 /* Accelerate.framework in Frameworks */,
+				AEBB7F1E17BAEAFA00A2CC19 /* AudioToolbox.framework in Frameworks */,
+				AEBB7F1F17BAEAFA00A2CC19 /* AudioUnit.framework in Frameworks */,
+				AEBB7F2017BAEAFA00A2CC19 /* CoreAudio.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		080E96DDFE201D6D7F000001 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				AEBB7EB617BAC47F00A2CC19 /* BasicApp.cpp */,
+			);
+			name = Source;
+			sourceTree = "<group>";
+		};
+		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				00B784AF0FF439BC000DE1D7 /* Accelerate.framework */,
+				00B784B00FF439BC000DE1D7 /* AudioToolbox.framework */,
+				00B784B10FF439BC000DE1D7 /* AudioUnit.framework */,
+				00B784B20FF439BC000DE1D7 /* CoreAudio.framework */,
+				5323E6B50EAFCA7E003A9687 /* QTKit.framework */,
+				5323E6B10EAFCA74003A9687 /* CoreVideo.framework */,
+				0091D8F80E81B9330029341E /* OpenGL.framework */,
+				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
+			);
+			name = "Linked Frameworks";
+			sourceTree = "<group>";
+		};
+		1058C7A2FEA54F0111CA2CBB /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				29B97324FDCFA39411CA2CEA /* AppKit.framework */,
+				29B97325FDCFA39411CA2CEA /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		19C28FACFE9D520D11CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				AEBB7F3B17BAEAFA00A2CC19 /* BasicApp.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		29B97314FDCFA39411CA2CEA /* BasicApp */ = {
+			isa = PBXGroup;
+			children = (
+				AEBB7EB817BAC4CD00A2CC19 /* Blocks */,
+				29B97315FDCFA39411CA2CEA /* Headers */,
+				080E96DDFE201D6D7F000001 /* Source */,
+				29B97317FDCFA39411CA2CEA /* Resources */,
+				29B97323FDCFA39411CA2CEA /* Frameworks */,
+				19C28FACFE9D520D11CA2CBB /* Products */,
+			);
+			name = BasicApp;
+			sourceTree = "<group>";
+		};
+		29B97315FDCFA39411CA2CEA /* Headers */ = {
+			isa = PBXGroup;
+			children = (
+				E3FE71DEC3104A3AB8011460 /* BasicApp_Prefix.pch */,
+			);
+			name = Headers;
+			sourceTree = "<group>";
+		};
+		29B97317FDCFA39411CA2CEA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				AEAFFA1D17F37D6C0033EE32 /* libNiTE2.dylib */,
+				AEAFFA1E17F37D6C0033EE32 /* libOpenNI2.dylib */,
+				AEAFFA1F17F37D6C0033EE32 /* NiTE.ini */,
+				AEAFFA2017F37D6C0033EE32 /* NiTE2 */,
+				AEAFFA2217F37D6C0033EE32 /* OpenNI.ini */,
+				AEAFFA2317F37D6C0033EE32 /* OpenNI2 */,
+				4B9EA6670FB94B019CB80224 /* CinderApp.icns */,
+				AEBB7F3C17BAEAFA00A2CC19 /* Info.plist */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */,
+				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		AEBB7EB817BAC4CD00A2CC19 /* Blocks */ = {
+			isa = PBXGroup;
+			children = (
+				AEBB7EB917BAC4D200A2CC19 /* Cinder-OpenNI */,
+			);
+			name = Blocks;
+			sourceTree = "<group>";
+		};
+		AEBB7EB917BAC4D200A2CC19 /* Cinder-OpenNI */ = {
+			isa = PBXGroup;
+			children = (
+				AEBB7EBA17BAC4DD00A2CC19 /* Cinder-OpenNI.cpp */,
+				AEBB7EBB17BAC4DD00A2CC19 /* Cinder-OpenNI.h */,
+			);
+			name = "Cinder-OpenNI";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		AEBB7F0617BAEAFA00A2CC19 /* BasicApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AEBB7F3817BAEAFA00A2CC19 /* Build configuration list for PBXNativeTarget "BasicApp" */;
+			buildPhases = (
+				AEBB7F0717BAEAFA00A2CC19 /* Resources */,
+				AEBB7F1517BAEAFA00A2CC19 /* Sources */,
+				AEBB7F1817BAEAFA00A2CC19 /* Frameworks */,
+				AED0E7B917E0E61B00852CCA /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BasicApp;
+			productInstallPath = "$(HOME)/Applications";
+			productName = BasicApp;
+			productReference = AEBB7F3B17BAEAFA00A2CC19 /* BasicApp.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		29B97313FDCFA39411CA2CEA /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0460;
+			};
+			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "BasicApp" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
+			mainGroup = 29B97314FDCFA39411CA2CEA /* BasicApp */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				AEBB7F0617BAEAFA00A2CC19 /* BasicApp */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		AEBB7F0717BAEAFA00A2CC19 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AEAFFA2B17F37D6C0033EE32 /* OpenNI2 in Resources */,
+				AEAFFA2817F37D6C0033EE32 /* NiTE2 in Resources */,
+				AEAFFA2717F37D6C0033EE32 /* NiTE.ini in Resources */,
+				AEBB7F0817BAEAFA00A2CC19 /* CinderApp.icns in Resources */,
+				AEAFFA2A17F37D6C0033EE32 /* OpenNI.ini in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		AEBB7F1517BAEAFA00A2CC19 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AEBB7F1617BAEAFA00A2CC19 /* BasicApp.cpp in Sources */,
+				AEBB7F1717BAEAFA00A2CC19 /* Cinder-OpenNI.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		AEBB7F3917BAEAFA00A2CC19 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = BasicApp_Prefix.pch;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/boost\"";
+				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path";
+				LIBRARY_SEARCH_PATHS = (
+					../../../lib,
+					"/Users/stephen.schieberl/Developer/cinder_dev/blocks/Cinder-OpenNI/lib",
+				);
+				OTHER_LDFLAGS = (
+					"\"$(CINDER_PATH)/lib/libcinder_d.a\"",
+					../../../lib/libNiTE2.dylib,
+					../../../lib/libOpenNI2.dylib,
+				);
+				PRODUCT_NAME = BasicApp;
+				SYMROOT = ./build;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		AEBB7F3A17BAEAFA00A2CC19 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_FAST_MATH = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = BasicApp_Prefix.pch;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/boost\"";
+				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path";
+				LIBRARY_SEARCH_PATHS = (
+					../../../lib,
+					"/Users/stephen.schieberl/Developer/cinder_dev/blocks/Cinder-OpenNI/lib",
+				);
+				OTHER_LDFLAGS = (
+					"\"$(CINDER_PATH)/lib/libcinder.a\"",
+					../../../lib/macosx/libNiTE2.dylib,
+					../../../lib/macosx/libOpenNI2.dylib,
+				);
+				PRODUCT_NAME = BasicApp;
+				STRIP_INSTALLED_PRODUCT = YES;
+				SYMROOT = ./build;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		C01FCF4F08A954540054247B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CINDER_PATH = ../../../../..;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/boost\"";
+				LD_RUNPATH_SEARCH_PATHS = "";
+				LIBRARY_SEARCH_PATHS = ../../../lib;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				OTHER_LDFLAGS = "";
+				SDKROOT = macosx;
+				USER_HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/include\" ../include ../../../src ../../../src/OpenNI ../../../src/NiTE";
+				VALID_ARCHS = x86_64;
+			};
+			name = Debug;
+		};
+		C01FCF5008A954540054247B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CINDER_PATH = ../../../../..;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/boost\"";
+				LD_RUNPATH_SEARCH_PATHS = "";
+				LIBRARY_SEARCH_PATHS = ../../../lib;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				OTHER_LDFLAGS = "";
+				SDKROOT = macosx;
+				USER_HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/include\" ../include ../../../src ../../../src/OpenNI ../../../src/NiTE";
+				VALID_ARCHS = x86_64;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		AEBB7F3817BAEAFA00A2CC19 /* Build configuration list for PBXNativeTarget "BasicApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AEBB7F3917BAEAFA00A2CC19 /* Debug */,
+				AEBB7F3A17BAEAFA00A2CC19 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "BasicApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C01FCF4F08A954540054247B /* Debug */,
+				C01FCF5008A954540054247B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 29B97313FDCFA39411CA2CEA /* Project object */;
+}
