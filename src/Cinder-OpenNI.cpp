@@ -62,8 +62,9 @@ bool success( nite::Status status )
 	case nite::Status::STATUS_OUT_OF_FLOW:
 		console() << "NiTE out of flow error" << endl;
 		return false;
+	default:
+		return true;
 	}
-	return true;
 }
 
 bool success( openni::Status status )
