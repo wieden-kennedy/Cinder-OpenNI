@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<cinder>
+<block
+	name="Cinder-OpenNI"
+	id="openni.bantherewind.com"
+	author="Stephen Schieberl"
+	git="git://github.com/wieden-kennedy/Cinder-OpenNI.git"
+	license="GPL, Commercial"
+	summary="OpenNI library for Cinder"
+	url="https://github.com/wieden-kennedy/Cinder-OpenNI"
+	>
+	<supports os="macosx" />
+	<supports os="msw" />
+	<header>src/Cinder-OpenNI.h</header>
+	<source>src/Cinder-OpenNI.cpp</source>
+/block>
+<template>templates/Basic OpenNI/template.xml</template>
+</cinder>
