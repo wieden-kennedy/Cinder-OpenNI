@@ -138,7 +138,7 @@ void _TBOX_PREFIX_App::setup()
 		// If we've successfully accessed a device, start and add a 
 		// callback for the depth stream.
 		if ( mDevice ) {
-			mDevice->connectDepthEventHandler( &BasicApp::onDepth, this );
+			mDevice->connectDepthEventHandler( &_TBOX_PREFIX_App::onDepth, this );
 			mDevice->start();
 		}
 	}
