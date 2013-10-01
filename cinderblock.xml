@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<cinder>
+<block
+	name="Cinder-OpenNI"
+	id="openni.bantherewind.com"
+	author="Stephen Schieberl"
+	git="git://github.com/wieden-kennedy/Cinder-OpenNI.git"
+	license="GPL, Commercial"
+	summary="OpenNI library for Cinder"
+	url="https://github.com/wieden-kennedy/Cinder-OpenNI"
+	>
+	<includePath>src</includePath>
+	<includePath>src/NiTE</includePath>
+	<includePath>src/OpenNI</includePath>
+	<supports os="macosx" />
+	<supports os="msw" />
+		<platform os="msw">
+		<staticLibrary>lib/NiTE2.lib</staticLibrary>
+		<buildCopy>lib/NiTE2.dll</buildCopy>
+		<staticLibrary>lib/OpenNI2.lib</staticLibrary>
+		<buildCopy>lib/OpenNI2.dll</buildCopy>
+		<buildCopy>lib/OpenNI2/Drivers/Kinect.dll</buildCopy>
+		<buildCopy>lib/OpenNI2/Drivers/libOniFile.dylib</buildCopy>
+		<buildCopy>lib/OpenNI2/Drivers/libPS1080.dylib</buildCopy>
+		<buildCopy>lib/OpenNI2/Drivers/libPSLink.dylib</buildCopy>
+		<buildCopy>lib/OpenNI2/Drivers/OniFile.dll</buildCopy>
+		<buildCopy>lib/OpenNI2/Drivers/PS1080.dll</buildCopy>
+		<buildCopy>lib/OpenNI2/Drivers/PS1080.ini</buildCopy>
+		<buildCopy>lib/OpenNI2/Drivers/PSLink.dll</buildCopy>
+		<buildCopy>lib/OpenNI2/Drivers/PSLink.ini</buildCopy>
+		<buildCopy>lib/NiTE2/FeatureExtraction.ini</buildCopy>
+		<buildCopy>lib/NiTE2/h.dat</buildCopy>
+		<buildCopy>lib/NiTE2/HandAlgorithms.ini</buildCopy>
+		<buildCopy>lib/NiTE2/s.dat</buildCopy>
+		<buildCopy>lib/NiTE2/Data/lbsdata.idx</buildCopy>
+		<buildCopy>lib/NiTE2/Data/lbsdata.lbd</buildCopy>
+		<buildCopy>lib/NiTE2/Data/lbsparam1.lbd</buildCopy>
+		<buildCopy>lib/NiTE2/Data/lbsparam2.lbd</buildCopy>
+	</platform>
+	<header>src/Cinder-OpenNI.h</header>
+	<source>src/Cinder-OpenNI.cpp</source>
+</block>
+<template>templates/Basic OpenNI/template.xml</template>
+</cinder>
